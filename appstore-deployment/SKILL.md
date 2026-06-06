@@ -7,6 +7,8 @@ description: App Store deployment compliance agent for iOS/macOS apps. Audits su
 
 Reduces App Store rejection risk by applying Apple's current review criteria (guidelines last updated **February 6, 2026**) to your submission before it reaches reviewers.
 
+> **Skill content last reviewed: June 6, 2026.** Recent additions: Texas SB 2420 age assurance (live June 4, 2026), EU single-business-model fees (CTF→CTC, Jan 1, 2026), Australia/Vietnam age ratings (June 18, 2026). ⚠️ **WWDC 2026 runs June 8–12** — re-check Apple's developer news for a new Guidelines revision and SDK minimums after the keynote.
+
 > **Authority hierarchy**: Apple's **App Review Guidelines** → **Program Requirements** (including Human Interface Guidelines and API docs incorporated into the [Apple Developer Program License Agreement](https://developer.apple.com/support/terms/apple-developer-program-license-agreement/) — “ADPLA”) → Apple Support/Developer Docs → Apple WWDC transcripts → Community evidence (Reddit/StackOverflow/blogs).  
 > When sources conflict, defer to the most recent Apple document. **Guidelines and ADPLA overlap but are not identical**: review can cite either; binary behavior must satisfy documented APIs, privacy rules, and contractual program requirements, not only guideline prose.
 

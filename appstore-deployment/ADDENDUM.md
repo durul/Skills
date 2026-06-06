@@ -120,6 +120,49 @@ Builds compiled with older Xcode versions or SDKs will be **rejected at upload t
 
 **Previous requirement (still in effect until April 28):** Xcode 16 / iOS 18 SDK (effective since April 24, 2025).
 
+**Status (June 2026):** This deadline has now passed and is in force — builds on older SDKs are rejected at upload.
+
+---
+
+## BREAKING: Texas Age Assurance — SB 2420 (Effective June 4, 2026)
+
+**Source:** https://developer.apple.com/news/?id=sg176nne
+**Source:** https://www.macrumors.com/2026/06/03/apple-app-store-texas-sb-2420/
+**Date:** Live since June 4, 2026 (a federal injunction was lifted, putting the law into effect)
+
+Texas law **SB 2420** introduces age-assurance and parental-consent obligations for app marketplaces and developers. It now applies to **new Apple Accounts created in Texas**. This is a live legal requirement, not a future deadline — treat it as a hard compliance item for any app available in the US.
+
+**What Apple changed for users:**
+- People creating an Apple Account in Texas must confirm whether they are 18 or older.
+- Accounts for users under 18 must belong to a **Family Sharing** group.
+- Parents/guardians must **consent** to App Store downloads, in-app purchases, and in-app transactions for minors.
+
+**What developers must implement (App Store Connect / APIs):**
+- **Declared Age Range API** — retrieve the broad age band of a Texas Apple Account (an age *category*, not a birth date or ID document). This is no longer beta-only for these obligations.
+- **Significant Change API** (under the **PermissionKit** framework) — you are responsible for determining when your app has a "significant change"; a significant change requires **re-obtaining parental consent**.
+- **New age-rating property type in StoreKit**.
+- **App Store server notifications** for **consent revocations** — handle the case where a parent withdraws consent.
+
+**Practical implication:**
+- If you serve US users, assume Texas users may be minors with consent gating on downloads and purchases. Build entitlement/consent checks server-side.
+- Pair this with the existing age-rating overhaul work (see below) — declared/verified age enforcement is now both a guideline obligation *and* a state-law obligation.
+
+---
+
+## Age Ratings: Australia & Vietnam Update (Effective June 18, 2026)
+
+**Source:** https://developer.apple.com/news/
+
+Starting **June 18, 2026**, App Store age ratings are updated in **Australia** and **Vietnam**. Notably, the **15+ age rating is no longer available** on the App Store in **Australia**. If you publish to these storefronts, re-check your App Store Connect age-rating answers so your displayed rating maps correctly to the local scheme.
+
+---
+
+## WATCH: WWDC 2026 (June 8–12, 2026)
+
+**Source:** https://www.apple.com/newsroom/2026/05/apple-kicks-off-worldwide-developers-conference-on-june-8/
+
+WWDC 2026 keynote is **June 8, 2026**. Apple historically announces major App Store, App Review Guidelines, SDK, and policy changes during WWDC week. **Re-scan this skill after June 8** for a new Guidelines revision, next-year SDK minimums (iOS 27 signals), and any new entitlement/privacy requirements.
+
 ---
 
 ## App Size Limits & Distribution Constraints
@@ -611,15 +654,25 @@ VStack {
 - Small Business Program & Mini Apps Partner Program (first year): **12%** (down from 15%)
 - Auto-renewal rate after year 1: **12%** (down from 15%)
 
-### Global rates (unchanged)
-- Standard: 30% (27% EU with Core Technology Fee alternative)
+### Global rates
+- Standard: 30%
 - Small Business Program (< $1M revenue): 15%
 - Auto-renewal after year 1: 15%
 
-### EU Digital Markets Act (DMA) alternatives
-- Core Technology Fee: €0.50 per first annual install over 1M (in lieu of reduced commission)
-- Alternative payment processing: -3% commission reduction
-- Alternative distribution via notarization: different fee structure
+### EU Digital Markets Act (DMA) — single business model (effective January 1, 2026)
+
+**Sources:** https://developer.apple.com/support/dma-and-apps-in-the-eu/ · https://adapty.io/blog/apple-eu-in-app-purchase-fee-system-2025/
+
+⚠️ **The old Core Technology Fee (CTF) of €0.50 per first annual install over 1M is gone.** As of **January 1, 2026**, Apple moved all EU developers to a **single business model** with a fee stack:
+
+- **Core Technology Commission (CTC): 5%** of digital goods/services proceeds — replaces the per-install CTF and applies across **all** EU distribution paths (App Store, alternative marketplaces, web distribution).
+- **Store services fee:** **Tier 1 = 5%** (basic discovery/management) or **Tier 2 = 13%** (full App Store features, including automatic app updates and ratings). Opting into Tier 1 only gives up Tier 2 services.
+- **Initial acquisition fee: 2%** of proceeds from new users (first 6 months).
+- **StoreKit External Purchase Link Entitlement (EU):** subject to **2% acquisition + 13% store services + 5% CTC** on transaction proceeds.
+
+**Key restriction:** within the same app on the same EU storefront, you **cannot offer both** Apple In-App Purchase **and** alternative payment options simultaneously.
+
+> Always confirm exact current percentages against Apple's DMA support page before quoting them to stakeholders — DMA terms have changed repeatedly.
 
 ---
 

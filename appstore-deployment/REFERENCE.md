@@ -609,7 +609,7 @@ Apple updated its age-rating system and requires developers to answer new age-ra
 #### Practical implication for AI + UGC apps
 - If the app can generate or expose mature text/images/video, the age-rating workflow is no longer just metadata
 - The product needs a real enforcement mechanism, not only a declared App Store age rating
-- Apple's **Declared Age Range API** is now available in **beta** (as of February 24, 2026) for testing age assurance in **Brazil, Australia, Singapore, Utah, and Louisiana**. Use it to meet upcoming age-verification obligations in these jurisdictions. The policy obligation to restrict underage access exists regardless of API availability.
+- Apple's **Declared Age Range API** launched in **beta** (February 24, 2026) for Brazil, Australia, Singapore, Utah, and Louisiana, and is now **in production use for legal compliance** in **Texas** under **SB 2420 (effective June 4, 2026)** — see [ADDENDUM.md](ADDENDUM.md). Use it (alongside the PermissionKit **Significant Change API** and consent-revocation server notifications) to meet age-verification and parental-consent obligations. The policy obligation to restrict underage access exists regardless of API availability.
 
 ---
 
