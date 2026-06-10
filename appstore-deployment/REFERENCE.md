@@ -1,7 +1,7 @@
 # App Store Rejection Reference Database
 
 Complete rejection patterns with Apple documentation anchors, community case studies, and specific fixes.  
-**Authority**: Apple's App Review Guidelines (last updated February 6, 2026)  
+**Authority**: Apple's App Review Guidelines (last updated June 8, 2026)  
 **Stats**: Apple reviewed 7,771,599 submissions in 2024; rejected ~1,931,400 (~24.9%).
 
 ---
@@ -390,6 +390,8 @@ Apps made from commercial app generators must be submitted by the provider of th
 2. Reporting mechanism with timely responses
 3. Ability to block abusive users
 4. Published contact information
+
+**Enforcement update (June 8, 2026)** — new §1.2 paragraph makes developers explicitly responsible for **removing** violating content (guideline, your ToS, or community standards). If Apple finds such content: removal request + demand for a **compliance-improvement plan**; app can be **removed from the App Store** until improvements are demonstrated; **egregious or repeated** behavior → immediate removal from the store **and the Apple Developer Program**. Tooling alone (the four components above) no longer suffices — actual takedown operations and a documented plan are expected. Precedent: Apple's Grok removal threat (April 2026).
 
 **What immediately disqualifies an app:**
 - Random/anonymous chat (Chatroulette-style) → explicitly subject to §1.2 UGC requirements (clarified in **February 6, 2026** guideline update); apps with random or anonymous chat must implement all four UGC components or face rejection

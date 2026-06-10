@@ -5,9 +5,9 @@ description: App Store deployment compliance agent for iOS/macOS apps. Audits su
 
 # App Store Deployment Agent Skill
 
-Reduces App Store rejection risk by applying Apple's current review criteria (guidelines last updated **February 6, 2026**) to your submission before it reaches reviewers.
+Reduces App Store rejection risk by applying Apple's current review criteria (guidelines last updated **June 8, 2026**) to your submission before it reaches reviewers.
 
-> **Skill content last reviewed: June 6, 2026.** Recent additions: Texas SB 2420 age assurance (live June 4, 2026), EU single-business-model fees (CTF→CTC, Jan 1, 2026), Australia/Vietnam age ratings (June 18, 2026). ⚠️ **WWDC 2026 runs June 8–12** — re-check Apple's developer news for a new Guidelines revision and SDK minimums after the keynote.
+> **Skill content last reviewed: June 9, 2026.** Latest: **June 8, 2026 WWDC-week revision** ([Apple announcement](https://developer.apple.com/news/?id=a233fmpw)) — §4.3(a)/(b) saturated & low-effort app rules with new **removal** powers (Gate E), §1.2 UGC **compliance-plan enforcement** (Gate G), §4.5.3 Live Activities anti-spam (Gate C), revised Introduction kid/teen safety guidance, and an ADPLA revision (AI/ML grouped under new **§3.3.11**, Foundation Models now **§3.3.11(A)**; §7.9 minors protections; Attachment 2 §1.1 IAP API; Attachment 5 §3.3 Passes privacy). Details: [ADDENDUM.md](ADDENDUM.md). Earlier: Texas SB 2420 age assurance (June 4, 2026), EU single-business-model fees (CTF→CTC, Jan 1, 2026), Australia/Vietnam age ratings (June 18, 2026). ⚠️ WWDC 2026 sessions run through June 12 — watch developer news for new SDK minimums and follow-up policy changes.
 
 > **Authority hierarchy**: Apple's **App Review Guidelines** → **Program Requirements** (including Human Interface Guidelines and API docs incorporated into the [Apple Developer Program License Agreement](https://developer.apple.com/support/terms/apple-developer-program-license-agreement/) — “ADPLA”) → Apple Support/Developer Docs → Apple WWDC transcripts → Community evidence (Reddit/StackOverflow/blogs).  
 > When sources conflict, defer to the most recent Apple document. **Guidelines and ADPLA overlap but are not identical**: review can cite either; binary behavior must satisfy documented APIs, privacy rules, and contractual program requirements, not only guideline prose.
@@ -77,7 +77,8 @@ Use this gate when auditing **contractual** obligations and **Program Requiremen
 - **Real-time route / navigation** apps: EULA must include Apple’s required **“YOUR USE OF THIS REAL TIME ROUTE GUIDANCE APPLICATION IS AT YOUR SOLE RISK. LOCATION DATA MAY NOT BE ACCURATE.”** (exact wording per current ADPLA / docs).
 - **Real-time weather guidance** via WeatherKit: EULA must include the **WeatherKit** disclaimer block required in Attachment 8 (accuracy / sole risk).
 
-**Foundation Models (§3.3.8(I))**
+**AI & machine learning (§3.3.11) — Foundation Models (§3.3.11(A))**
+- The **June 8, 2026** ADPLA revision grouped AI/ML technologies under new **§3.3.11** and moved/updated the Foundation Models requirements (formerly §3.3.8(I)); §3.2(h) also updated terms for use of and access to **Apple models**.
 - On-device / Apple Intelligence **Foundation Models** use is subject to Apple’s **[Foundation Models Framework Acceptable Use Requirements](https://developer.apple.com/apple-intelligence/acceptable-use-requirements-for-the-foundation-models-framework)**; keep **Adapters** compatible with the shipping model or risk OS incompatibility (§6.8).
 
 **Regional addenda (verify current Apple Materials)**
@@ -236,7 +237,7 @@ Rejection message pattern: *"Your app requests access to [resource] but does not
 - **IDFA / AdSupport (ADPLA §3.3.3(E))**: use **only** to **serve advertising**; check **Tracking Preference** before using IDFA for ads; after user **resets** the advertising identifier, do **not** link old and new IDs or derived data.  
 - **Ad Network APIs** (if granted): use **only** for **ad validation / conversion** per Apple’s terms — no combining validation payloads with other user profiles.  
 - **Kids Category**: **no** third-party analytics or third-party advertising in apps **primarily for kids** (**§1.3**); stricter rules for minors’ data.  
-- **APNs / local notifications (Attachment 1)**: no **spam** or **phishing**; **promotional** push only with **explicit in-app opt-in** language and in-app **opt-out**, except Pass-related promotions tied to the Pass. Do not use notifications to **evade** privacy or tracking rules.  
+- **APNs / local notifications (Attachment 1)**: no **spam** or **phishing**; **promotional** push only with **explicit in-app opt-in** language and in-app **opt-out**, except Pass-related promotions tied to the Pass. Do not use notifications to **evade** privacy or tracking rules. **§4.5.3 (June 8, 2026)** now explicitly extends the anti-spam/phishing/unsolicited-message rule to **Live Activities**.  
 - **Network Extension / “Access Wi‑Fi Info” (ADPLA §3.3.3(G))**: entitlements are for **networking functionality**, **not** ads, profiling, or bypassing user privacy settings (e.g. inferring location when location is off).  
 - Reference: [§5.1 Privacy](https://developer.apple.com/app-store/review/guidelines/#privacy) · [ATT](https://developer.apple.com/documentation/apptrackingtransparency)
 
@@ -287,8 +288,11 @@ Fix: Add meaningful native features — device sensors, push notifications, offl
 **Hidden features (§2.3.1):** Any feature reachable via deep link, debug gesture, or feature flag that reviewers can't discover through normal use = hidden feature = rejection.  
 Fix: Document every non-obvious feature path in Notes for Review with specificity.
 
-**Spam (§4.3):** Multiple Bundle IDs for near-identical apps (different regions/teams/languages) = removal risk.  
-Fix: One app with in-app variations or in-app purchase.
+**Spam (§4.3) — significantly tightened June 8, 2026:**
+- **§4.3(a) — duplicates of your own app:** Multiple Bundle IDs for near-identical apps (different regions/teams/languages) = removal risk. Fix: one app with in-app variations or in-app purchase. (June 2026 revision clarifies the basis and adds an example.)
+- **§4.3(b) — saturated categories:** New language: *"Don't submit apps that are indistinguishable from what's already widely available."* **Dating, flashlight, sound effects, wallpaper, simple timer, and fortune telling** apps are accepted **only** if they offer a *"meaningfully different or improved experience."* Apple **may also remove existing apps** in these categories that are *"not updated, improved, or do not attract customers"* — keep shipped apps maintained.
+- **§4.3(b) — low-effort categories:** **Drinking games, Kama Sutra, fart, and burp** apps are deemed *"mediocre, low-quality, or low-effort"* and *"do not add value to the App Store."* **Repeated submissions of this kind may lead to removal from the Apple Developer Program.**
+- **Practical impact:** for any app near these categories, prepare a written **differentiation case** (unique features, target audience, quality bar) in Notes for Review; expect higher scrutiny and possible clutter-cleanup removals of stale apps.
 
 **Copycats (§4.1):** Closely mirroring another app's icon, name, or UI = rejection + potential expulsion.
 
@@ -336,6 +340,12 @@ Fix: One app with in-app variations or in-app purchase.
 ---
 
 ## Gate G — AI Features, UGC, and Age Gates (§1.2, §4.7, §5.1.2)
+
+**§1.2 enforcement — content removal + compliance plan (new paragraph, June 8, 2026):**
+> *"It is your responsibility to remove content that violates this guideline, your terms of service, or your community standards. If we find such content, we will ask you to remove it, and provide a plan to improve your compliance with this guideline. Based on your response, your app may be removed from the App Store until you can demonstrate improvements that bring your app into compliance. Egregious or repeated behavior is grounds for immediate removal of your app from the App Store, and from the Apple Developer Program."*
+
+- Moderation **tooling** (filter/report/block/contact) is no longer sufficient on its own — you must **actually remove** violating content (e.g. pornographic content) and be ready to produce a **written compliance plan** if Apple flags your app.
+- Enforcement is real: Apple used this rule to threaten removal of **Grok** (April 2026). UGC/AI apps should maintain a documented moderation playbook **before** submission and keep takedown-response evidence for Resolution Center.
 
 **If your app has AI-generated content visible to users:**
 - Treat it as UGC: must have report/block/filter mechanisms (§1.2)
@@ -496,6 +506,6 @@ Rejected → Read guideline clause cited exactly
 - **[REFERENCE.md](REFERENCE.md)** — Full rejection database with community case studies, Apple doc anchors, Reddit/StackOverflow patterns, fix code examples; **§5.2 / §5.1.5 / ads–push / export** pattern tables; **§5.3 gambling**, **§1.1 safety/speech**, **sandbox & system access** tables
 - **[EDGE-CASES.md](EDGE-CASES.md)** — AI policy, hot updates, privacy manifests, external payments, UGC edge cases, regulated domains
 - **[CHECKLIST.md](CHECKLIST.md)** — Printable pre-submission checklist and reviewer kit templates
-- **[ADDENDUM.md](ADDENDUM.md)** — Vibe coding crackdown (March 2026), age rating overhaul, visionOS requirements, app size limits, ITMS error codes, ATS exceptions, launch screen, code signing, TestFlight vs App Store review, inactive app removal, screenshot requirements, local network permission, notification timing, post-approval quality (§5.6.4), **Japan ADPLA Attachment 12** (alternative payments / out-of-app / marketplace)
+- **[ADDENDUM.md](ADDENDUM.md)** — **June 8, 2026 Guidelines + ADPLA revision** (4.3 spam tiers, 1.2 UGC enforcement, 4.5.3 Live Activities, §3.3.11 AI/ML), vibe coding crackdown (March 2026), age rating overhaul, visionOS requirements, app size limits, ITMS error codes, ATS exceptions, launch screen, code signing, TestFlight vs App Store review, inactive app removal, screenshot requirements, local network permission, notification timing, post-approval quality (§5.6.4), **Japan ADPLA Attachment 12** (alternative payments / out-of-app / marketplace)
 
 **Maintenance:** Rejection statistics (e.g. 2024 transparency counts) should be refreshed when Apple publishes new annual reports; gate logic and guideline links stay authoritative until Apple updates the guidelines page.

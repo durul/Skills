@@ -50,6 +50,7 @@ Copy and use these checklists before every submission.
 - [ ] ATT prompt implemented if app does any cross-app or cross-site tracking; IDFA used only for advertising per ADPLA; Tracking Preference honored; no linking IDs after user resets advertising identifier
 - [ ] Location used only where **directly relevant** to features (**§5.1.5**); purpose strings match behavior; no overriding Apple location consent UI; “Always” has clear user benefit
 - [ ] Promotional push / APN: opt-in + opt-out in app if promotional (except Pass-tied rules); no spam/phishing pattern
+- [ ] Live Activities not used to spam, phish, or send unsolicited messages (**§4.5.3**, June 2026)
 - [ ] Network Extension / Wi‑Fi entitlements: used for networking only, not ads or location fingerprinting
 - [ ] Third-party AI providers disclosed in privacy policy and App Privacy label
 - [ ] Account deletion: in-app initiated, deletes account + data, easy to find
@@ -76,7 +77,9 @@ Copy and use these checklists before every submission.
 - [ ] App description matches current features (no removed features still advertised)
 - [ ] "What's New" is specific (not "bug fixes and performance improvements")
 - [ ] App is not a thin WebView wrapper without native functionality
-- [ ] No multiple Bundle IDs for near-identical apps
+- [ ] No multiple Bundle IDs for near-identical apps (**§4.3(a)**)
+- [ ] **§4.3(b) saturated categories** (dating, flashlight, sound effects, wallpaper, simple timer, fortune telling): app offers a *meaningfully different or improved* experience; differentiation case documented in Notes for Review (June 2026 — Apple may also remove stale/unsuccessful apps in these categories)
+- [ ] **§4.3(b) low-effort categories** (drinking games, Kama Sutra, fart, burp): not submitting — repeated submissions risk Apple Developer Program removal (June 2026)
 - [ ] **IP clearance**: app binary + screenshots + previews + description + icon: you own or license all content (audio, video, images, fonts, data feeds, third-party logos); no false **Apple endorsement** (**§5.2.4**)
 - [ ] **Apple marks / Apple Pay / Wallet / “Compatible with”**: comply with [App Store marketing guidelines](https://developer.apple.com/app-store/marketing/guidelines/), [Apple trademark guidelines](https://www.apple.com/legal/intellectual-property/guidelinesfor3rdparties.html), and product-specific guides (Apple Pay, Wallet) where applicable
 - [ ] **Website / Safari Push** (if used): sent under **your** brand with **your** identifying artwork; no impersonation; third-party marks only with rights; written notice to Apple for any push screenshots/marketing exclusions
@@ -115,6 +118,7 @@ Copy and use these checklists before every submission.
 - [ ] AI features: user consent obtained before sending personal data to third-party AI
 - [ ] AI-generated user-visible content: report, block, filter mechanisms present
 - [ ] UGC moderation: filter, report (with timely response), block, contact info — all four present
+- [ ] UGC takedown operations active: violating content (incl. pornographic) is actually removed, and a **written compliance plan** can be produced if Apple asks (**§1.2**, June 2026)
 - [ ] NSFW content: hidden by default; enable toggle only available on your website (not in-app)
 - [ ] Kids Category: no third-party analytics, no third-party advertising, no tracking identifiers
 - [ ] If the app is a creator / AI content app, age-rating answers in App Store Connect were re-reviewed for 2026 updates
@@ -512,6 +516,9 @@ echo "✅ Check complete. Review warnings above."
 | "Non-public API detected" | 2.5.1 | Replace private API with public alternative |
 | "App downloads executable code" | 2.5.2 | Remove hot-update; restrict to content updates |
 | "UGC moderation insufficient" | 1.2 | Add report, block, filter, contact info |
+| "Violating content found / compliance plan requested" | 1.2 (June 2026) | Remove flagged content immediately; submit written compliance-improvement plan in Resolution Center |
+| "App is indistinguishable from existing apps / saturated category" | 4.3(b) (June 2026) | Document meaningfully different or improved experience; add unique features; differentiation case in Notes for Review |
+| "Live Activities used for promotional/unsolicited messages" | 4.5.3 (June 2026) | Restrict Live Activities to real-time, user-initiated activity content |
 | "Missing privacy manifest" | ITMS-91061 | Update SDK to version with manifest |
 | "Personal data shared without consent" | 5.1.2 | Add consent before AI/analytics data transmission |
 | "Paywall is misleading / amount not prominent" | 3.1.2 / 5.6 | Make billed amount dominant; remove deceptive emphasis |

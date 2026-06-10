@@ -32,6 +32,8 @@ If AI generates content that users can see (chatbot responses, generated images,
 
 **Rejection pattern:** App with AI chatbot rejected because reviewer prompted it to produce harmful content and there was no filtering or reporting mechanism.
 
+**Enforcement escalation (June 8, 2026):** §1.2 now states developers are responsible for **removing** violating content; Apple can demand a **compliance-improvement plan**, remove the app until improvements are demonstrated, and treat egregious/repeated behavior as grounds for **immediate removal from the App Store and the Apple Developer Program**. For AI apps this means moderation must work operationally (actual takedowns), not just exist as UI. Precedent: Grok removal threat (April 2026). See [ADDENDUM.md — June 8, 2026 revision](ADDENDUM.md#breaking-june-8-2026--guidelines--adpla-revision-wwdc-week).
+
 ### On-device AI and Apple Intelligence (iOS 18+)
 
 - Apple Intelligence APIs: no explicit consent needed beyond standard permission (data stays on device)

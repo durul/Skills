@@ -4,6 +4,59 @@ Material discovered during second-pass audit. These are real rejection causes an
 
 ---
 
+## BREAKING: June 8, 2026 — Guidelines + ADPLA Revision (WWDC week)
+
+**Source:** https://developer.apple.com/news/?id=a233fmpw  
+**Coverage:** https://www.macrumors.com/2026/06/09/app-store-guidelines-low-quality-apps/  
+**Date:** June 8, 2026
+
+### App Review Guidelines changes
+
+**Introduction** — revised kid and teen safety guidance.
+
+**§1.2 (UGC) — new enforcement paragraph:**
+
+> *"It is your responsibility to remove content that violates this guideline, your terms of service, or your community standards. If we find such content, we will ask you to remove it, and provide a plan to improve your compliance with this guideline. Based on your response, your app may be removed from the App Store until you can demonstrate improvements that bring your app into compliance. Egregious or repeated behavior is grounds for immediate removal of your app from the App Store, and from the Apple Developer Program."*
+
+- Apps without a **compliance plan** for content violations can be removed from the App Store.
+- Context: Apple threatened to pull **Grok** under this rule (April 2026).
+
+**§4.3(a)** — clarifies the basis for the guideline and adds an example (near-identical apps under multiple Bundle IDs).
+
+**§4.3(b) — full new text:**
+
+> *"Don't submit apps that are indistinguishable from what's already widely available. Opportunistically creating variants of existing app categories or popular apps degrades App Store discovery, reduces overall app quality, and harms both users and developers. Certain kinds of apps, such as dating, flashlight, sound effects, wallpaper, simple timers, and fortune telling, are well established on the App Store and we will not accept new submissions unless they offer a meaningfully different or improved experience. We may remove these apps from the App Store going forward if they are not updated, improved, or do not attract customers. Other kinds of apps, such as drinking games, Kama Sutra, fart, and burp apps, are mediocre, low-quality, or low-effort and do not add value to the App Store. Repeated submissions of this kind may lead to removal from the Apple Developer Program."*
+
+Old text (for comparison): *"Also avoid piling on to a category that is already saturated; the App Store has enough fart, burp, flashlight, fortune telling, dating, drinking games, and Kama Sutra apps, etc. already. We will reject these apps unless they provide a unique, high-quality experience. Spamming the store may lead to your removal from the Apple Developer Program."*
+
+What changed in practice:
+- **Saturated tier** (dating, flashlight, sound effects, wallpaper, simple timers, fortune telling): new submissions need a *meaningfully different or improved* experience; **existing** apps may be **removed** if not updated/improved or attracting no customers — a new clutter-cleanup power.
+- **Low-effort tier** (drinking games, Kama Sutra, fart, burp): labeled *"mediocre, low-quality, or low-effort"*; **repeated submissions → Apple Developer Program removal**.
+- Lists are explicitly **examples** ("such as") — expect application to adjacent categories.
+
+**§4.5.3** — clarifies that **Live Activities** may not be used to spam, phish, or send unsolicited messages to customers.
+
+### ADPLA changes (same revision — accept updated terms in your developer account)
+
+- **§3.1, §14.8**: requirements for providing information / responding to questions about **developer identity**, incl. export-compliance context.
+- **§3.3.3(N)**: Sensitive Content Analysis framework requirements clarified.
+- **§3.3.3(Q)**: Suggested Actions API requirements specified.
+- **§3.3.3(R)**: Trust Insights framework requirements specified.
+- **§3.3.4(A)**: terms on end users modifying content for personal **accessibility** purposes.
+- **§3.3.7(L)**: Media Device Extension framework requirements.
+- **§3.3.7(M)**: Spatial Audio Extension APIs requirements.
+- **§3.3.9(E)**: Customer Engagement APIs requirements.
+- **§3.2(h)**: updated terms for use of and access to **Apple models**.
+- **§3.3.11 (new)**: AI and machine learning technologies grouped under this subsection; **§3.3.11(A)**: updated **Foundation Models** framework requirements (formerly §3.3.8(I)).
+- **§6.7**: analytics may additionally be provided via **Xcode** and/or **App Store Connect API**.
+- **§7.9**: requirements on providing app information in App Store Connect and protection of **minor** end users.
+- **§10**: indemnification terms clarified.
+- **Attachment 2 §1.1**: In-App Purchase API requirements clarified.
+- **Attachment 5 §3.3**: updated **privacy** requirements for use of **Passes**.
+- **Attachment 11 §4**: EnergyKit identity-guidelines name updated.
+
+---
+
 ## BREAKING: Vibe Coding App Crackdown (March 2026)
 
 **Source:** https://www.macrumors.com/2026/03/30/apple-pulls-vibe-coding-app/  
@@ -161,7 +214,7 @@ Starting **June 18, 2026**, App Store age ratings are updated in **Australia** a
 
 **Source:** https://www.apple.com/newsroom/2026/05/apple-kicks-off-worldwide-developers-conference-on-june-8/
 
-WWDC 2026 keynote is **June 8, 2026**. Apple historically announces major App Store, App Review Guidelines, SDK, and policy changes during WWDC week. **Re-scan this skill after June 8** for a new Guidelines revision, next-year SDK minimums (iOS 27 signals), and any new entitlement/privacy requirements.
+WWDC 2026 keynote was **June 8, 2026**. ✅ The expected Guidelines + ADPLA revision landed the same day — see [June 8, 2026 revision](#breaking-june-8-2026--guidelines--adpla-revision-wwdc-week) at the top of this file (incorporated June 9, 2026). **Still watch through June 12 and beyond** for next-year SDK minimums (iOS 27 signals, likely an Xcode 27-era upload requirement around April 2027) and any new entitlement/privacy requirements announced in sessions.
 
 ---
 
@@ -601,6 +654,7 @@ Rejection triggers:
 - Cannot be used for persistent advertising
 - Must end when the activity is complete (don't leave stale Live Activities)
 - Dynamic Island content must be concise and glanceable
+- **§4.5.3 (June 8, 2026)**: may not be used to **spam, phish, or send unsolicited messages** to customers
 
 ### App Clips
 
