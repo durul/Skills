@@ -71,6 +71,8 @@ Apple's 2026 age-rating update introduces a practical requirement for creator-st
 
 This creates a new risk for AI chat, image, avatar, and roleplay apps that previously relied only on "17+" store metadata.
 
+**July 2026 update:** the App Store Connect questionnaire now asks about **social media capabilities** (redistributing, amplifying, or interacting with UGC through a social feed or similar discovery method) to drive iOS 27 **Time Allowances** parental controls; answers are **mandatory from September 2026** for new apps, updates, and notarization. AI apps whose generated content is shareable into a feed likely qualify — see [ADDENDUM.md](ADDENDUM.md#breaking-age-rating-questionnaire-adds-social-media-questions-july-9-2026).
+
 ---
 
 ## App Store vs Notarization Scope (Frequently Overlooked)
@@ -332,7 +334,7 @@ fetch('https://myserver.com/logic.js')
 
 **Why:** The US storefront exception is real but limited. Most developers distribute globally.
 
-### Current rules by region (Feb 2026)
+### Current rules by region (July 2026)
 
 **United States:**
 - External links/CTAs: ✅ No entitlement needed (US storefront only)
@@ -354,6 +356,15 @@ fetch('https://myserver.com/logic.js')
 - StoreKit External Purchase Entitlement for South Korea
 - Requires separate binary distributed only in South Korea App Store
 - Must use required StoreKit APIs
+
+**Japan:**
+- **Alternative Payments** and/or **Out-of-App Offers** with Apple-granted entitlement (iOS 26.2+)
+- IAP must stay at least as prominent; out-of-app links must open the default browser (not a web view)
+- ADPLA Attachment 12 — see [ADDENDUM.md Japan section](ADDENDUM.md#japan-app-store--adpla-attachment-12-commerce--distribution)
+
+**Brazil (since June 18, 2026):**
+- Alternative app marketplaces, **Alternative Payments**, and **Out-of-App Offers** with Apple-granted entitlements (iOS 26.5+, CADE agreement)
+- **Core Technology Commission** applies; terms in ADPLA Attachment 12 ("Japan, Brazil") — see [ADDENDUM.md Brazil section](ADDENDUM.md#breaking-brazil--alternative-distribution--payments-june-18-2026)
 
 **Everywhere else:**
 - External purchase links/CTAs: ❌ Not allowed
@@ -532,6 +543,7 @@ Because Apple changed the age-rating system in 2026, stale App Store Connect ans
 - adding chat or image generation,
 - allowing mature/user-uploaded content,
 - adding social sharing,
+- adding a social feed or UGC discovery surface (triggers the July 2026 **social media capability** questions — answers mandatory from September 2026, including for notarization),
 - or changing moderation posture.
 
 ---

@@ -7,7 +7,7 @@ description: App Store deployment compliance agent for iOS/macOS apps. Audits su
 
 Reduces App Store rejection risk by applying Apple's current review criteria (guidelines last updated **June 8, 2026**) to your submission before it reaches reviewers.
 
-> **Skill content last reviewed: June 9, 2026.** Latest: **June 8, 2026 WWDC-week revision** ([Apple announcement](https://developer.apple.com/news/?id=a233fmpw)) — §4.3(a)/(b) saturated & low-effort app rules with new **removal** powers (Gate E), §1.2 UGC **compliance-plan enforcement** (Gate G), §4.5.3 Live Activities anti-spam (Gate C), revised Introduction kid/teen safety guidance, and an ADPLA revision (AI/ML grouped under new **§3.3.11**, Foundation Models now **§3.3.11(A)**; §7.9 minors protections; Attachment 2 §1.1 IAP API; Attachment 5 §3.3 Passes privacy). Details: [ADDENDUM.md](ADDENDUM.md). Earlier: Texas SB 2420 age assurance (June 4, 2026), EU single-business-model fees (CTF→CTC, Jan 1, 2026), Australia/Vietnam age ratings (June 18, 2026). ⚠️ WWDC 2026 sessions run through June 12 — watch developer news for new SDK minimums and follow-up policy changes.
+> **Skill content last reviewed: July 12, 2026.** Latest: **July 9, 2026** — App Store Connect age-rating questionnaire adds **social media capability** questions (tied to iOS 27 **Time Allowances**); responses **mandatory from September 2026** for new apps, updates, and notarization ([announcement](https://developer.apple.com/news/?id=tlur8uvi)). **June 18, 2026** — **Brazil** opens to alternative marketplaces, **Alternative Payments**, and **Out-of-App Offers** (iOS 26.5, CADE agreement); ADPLA **Attachment 12** retitled to cover **Japan and Brazil**, acceptance deadline July 6, 2026 ([announcement](https://developer.apple.com/news/?id=umq9wxmm)); same day, Australia/Vietnam age-rating changes took effect. **June 8, 2026 WWDC-week revision** ([Apple announcement](https://developer.apple.com/news/?id=a233fmpw)) — §4.3(a)/(b) saturated & low-effort app rules with new **removal** powers (Gate E), §1.2 UGC **compliance-plan enforcement** (Gate G), §4.5.3 Live Activities anti-spam (Gate C), revised Introduction kid/teen safety guidance, and an ADPLA revision (AI/ML grouped under new **§3.3.11**, Foundation Models now **§3.3.11(A)**; §7.9 minors protections; Attachment 2 §1.1 IAP API; Attachment 5 §3.3 Passes privacy). Details: [ADDENDUM.md](ADDENDUM.md). Earlier: Texas SB 2420 age assurance (June 4, 2026), EU single-business-model fees (CTF→CTC, Jan 1, 2026).
 
 > **Authority hierarchy**: Apple's **App Review Guidelines** → **Program Requirements** (including Human Interface Guidelines and API docs incorporated into the [Apple Developer Program License Agreement](https://developer.apple.com/support/terms/apple-developer-program-license-agreement/) — “ADPLA”) → Apple Support/Developer Docs → Apple WWDC transcripts → Community evidence (Reddit/StackOverflow/blogs).  
 > When sources conflict, defer to the most recent Apple document. **Guidelines and ADPLA overlap but are not identical**: review can cite either; binary behavior must satisfy documented APIs, privacy rules, and contractual program requirements, not only guideline prose.
@@ -82,7 +82,8 @@ Use this gate when auditing **contractual** obligations and **Program Requiremen
 - On-device / Apple Intelligence **Foundation Models** use is subject to Apple’s **[Foundation Models Framework Acceptable Use Requirements](https://developer.apple.com/apple-intelligence/acceptable-use-requirements-for-the-foundation-models-framework)**; keep **Adapters** compatible with the shipping model or risk OS incompatibility (§6.8).
 
 **Regional addenda (verify current Apple Materials)**
-- **Japan** — Alternative App Marketplaces, **Alternative Payment Processing**, and **Out-of-App Offers** have detailed design, entitlement, browser, prominence, age-gating, and reporting rules (**Attachment 12**). See [ADDENDUM.md — Japan ADPLA commerce](ADDENDUM.md#japan-app-store-adpla-attachment-12-commerce--distribution).
+- **Japan** — Alternative App Marketplaces, **Alternative Payment Processing**, and **Out-of-App Offers** have detailed design, entitlement, browser, prominence, age-gating, and reporting rules (**Attachment 12**, retitled June 18, 2026 to "Additional Terms for iOS Apps in Japan, Brazil"). See [ADDENDUM.md — Japan ADPLA commerce](ADDENDUM.md#japan-app-store--adpla-attachment-12-commerce--distribution).
+- **Brazil** — As of **June 18, 2026** (iOS 26.5, CADE agreement): alternative app marketplaces, **Alternative Payments**, and **Out-of-App Offers** with Apple-granted entitlements; **Core Technology Commission** applies. Terms live in the same **Attachment 12**; Apple set a **July 6, 2026** deadline for accepting the updated ADPLA. See [ADDENDUM.md — Brazil](ADDENDUM.md#breaking-brazil--alternative-distribution--payments-june-18-2026).
 - **China mainland storefront** — **Attachment 13** amends **paid** commission rates (e.g. **25%** standard / **12%** small business and qualifying cases effective **March 15, 2026** per ADPLA text); confirm current Paid Applications Agreement for accounting.
 
 **Notarization (macOS §5.3)**
@@ -96,9 +97,9 @@ Use this gate when auditing **contractual** obligations and **Program Requiremen
 
 ---
 
-## Rejection Frequency (Apple 2024 — ~24.9% rejection rate)
+## Rejection Frequency (Apple 2025 — ~22% rejection rate)
 
-Apple reviewed **7,771,599** submissions and rejected **~1,931,400** in 2024. A single rejection can cite multiple sections. Ranked by section prevalence:
+Apple reviewed **more than 9.1 million** submissions and rejected **over 2 million** in 2025 (~1.2M new apps + ~800K pending updates; it also rejected ~138,000 developer enrollments and terminated ~193,000 developer accounts for suspected fraud — [2025 App Store Transparency Report](https://www.apple.com/legal/app-store/transparency/2025/)). A single rejection can cite multiple sections. Ranked by section prevalence:
 
 | Rank | Section | Apple Anchor | Key Sublaws |
 |------|---------|-------------|-------------|
@@ -110,6 +111,7 @@ Apple reviewed **7,771,599** submissions and rejected **~1,931,400** in 2024. A 
 | — | **Technical** | §2.5.1/2.5.2 | Private APIs, code download, hot updates |
 
 > Apple states: **"Over 40% of unresolved issues are related to Guideline 2.1: App Completeness."**  
+> Apple also states: *"On average, 90% of submissions are reviewed in less than 24 hours."*  
 > Source: [developer.apple.com/app-store/review](https://developer.apple.com/app-store/review/)
 
 ---
@@ -133,12 +135,12 @@ These prevent even entering review. Fix before submitting.
 - Xcode 16 bug: manually type the filename; verify `UILaunchStoryboardName` in Info.plist.
 
 **Screenshot dimensions**
-- Exact pixel dimensions required (1px off fails upload). Minimum: 6.7" (1290x2796) iPhone; 12.9" (2048x2732) iPad.
+- Exact pixel dimensions required (1px off fails upload). Required baseline: **6.9" (1320x2868)** iPhone (6.5" 1284x2778 accepted as fallback) and **13" (2064x2752)** iPad.
 - Screenshots must reflect current build UI — outdated screenshots trigger §2.3.
 
 **App size limits**
-- iOS/visionOS: 4 GB max, __TEXT: 500 MB. watchOS: 75 MB hard limit.
-- Cellular download: 200 MB default threshold — above requires Wi-Fi.
+- iOS: 4 GB max; executable limit **80 MB** total `__TEXT` per Apple's current table. tvOS/visionOS: 4 GB, `__TEXT` 500 MB. watchOS: 75 MB hard limit.
+- Cellular download: 200 MB default prompt threshold — users are asked before downloading over cellular (and can change the setting).
 - Use Background Assets / On Demand Resources for large content.
 
 **App Transport Security (ATS)**
@@ -192,8 +194,8 @@ The single largest rejection driver. Apple requires submissions be **"final vers
 **IAP-specific "catch-22" loop (very common):**  
 Products showing blank/missing pricing during review → rejected under 2.1(b). Fix: Submit IAPs together with the binary in App Store Connect. Ensure products are approved (not just created) before submitting the build.
 
-**Receipt validation pattern that satisfies reviewers:**  
-`/verifyReceipt` production first → if status 21007, fallback to sandbox. Apple's own rejection message text confirms this sequence.
+**Receipt validation:**  
+Prefer **StoreKit 2** on-device verification plus the **App Store Server API** — the legacy `/verifyReceipt` endpoint is **deprecated**. If a legacy backend still calls it: production first → if status 21007, fallback to sandbox (Apple's own rejection message text confirms this sequence).
 
 **Reference:** [developer.apple.com/app-store/review/guidelines/#app-completeness](https://developer.apple.com/app-store/review/guidelines/#app-completeness)  
 **Community case:** RevenueCat ultimate guide — [revenuecat.com/blog/growth/the-ultimate-guide-to-app-store-rejections](https://www.revenuecat.com/blog/growth/the-ultimate-guide-to-app-store-rejections/)
@@ -256,11 +258,12 @@ Rejection message pattern: *"Your app requests access to [resource] but does not
 | United States | Yes | No (as of current guidelines) |
 | EU (iOS/iPadOS) | With StoreKit External Purchase Link Entitlement | Yes |
 | Japan (Japan App Store storefront) | **Alternative Payment Processing** and/or **Out-of-App Offers** only with Apple-granted entitlement + **StoreKit** eligibility/disclosure flows; see ADPLA **Attachment 12** and Apple Materials | Yes |
+| Brazil (Brazil storefront) | **Alternative Payments** and/or **Out-of-App Offers** with Apple-granted entitlement (iOS 26.5+, since June 18, 2026, CADE agreement); see ADPLA **Attachment 12** ("Japan, Brazil") and Apple Materials | Yes |
 | Netherlands dating apps | With specific entitlement | Yes |
 | South Korea | With StoreKit External Purchase Entitlement | Yes |
 | All others | No | N/A |
 
-**Japan (Attachment 12) — design rules that differ from “US-style” external links:** IAP must be offered **at least as prominently** as any alternative payment option on the same screen; **Out-of-App** purchases use an **actionable link** that opens the **default web browser** (not an in-app `WKWebView`); no website-purchase promo on the **App Store product page**; **Kids** category and age rules block certain offers; entitlement/device OS requirements are defined in Apple Materials (ADPLA references **iOS 26.2+**, Japan devices). Full checklist: [ADDENDUM.md](ADDENDUM.md#japan-app-store-adpla-attachment-12-commerce--distribution).
+**Japan (Attachment 12) — design rules that differ from “US-style” external links:** IAP must be offered **at least as prominently** as any alternative payment option on the same screen; **Out-of-App** purchases use an **actionable link** that opens the **default web browser** (not an in-app `WKWebView`); no website-purchase promo on the **App Store product page**; **Kids** category and age rules block certain offers; entitlement/device OS requirements are defined in Apple Materials (ADPLA references **iOS 26.2+**, Japan devices). Full checklist: [ADDENDUM.md](ADDENDUM.md#japan-app-store--adpla-attachment-12-commerce--distribution).
 
 **Subscription paywall — minimum required disclosures:**
 - Subscription price and billing period must be **prominent and legible**
@@ -345,7 +348,7 @@ Fix: Document every non-obvious feature path in Notes for Review with specificit
 > *"It is your responsibility to remove content that violates this guideline, your terms of service, or your community standards. If we find such content, we will ask you to remove it, and provide a plan to improve your compliance with this guideline. Based on your response, your app may be removed from the App Store until you can demonstrate improvements that bring your app into compliance. Egregious or repeated behavior is grounds for immediate removal of your app from the App Store, and from the Apple Developer Program."*
 
 - Moderation **tooling** (filter/report/block/contact) is no longer sufficient on its own — you must **actually remove** violating content (e.g. pornographic content) and be ready to produce a **written compliance plan** if Apple flags your app.
-- Enforcement is real: Apple used this rule to threaten removal of **Grok** (April 2026). UGC/AI apps should maintain a documented moderation playbook **before** submission and keep takedown-response evidence for Resolution Center.
+- Enforcement is real: Apple threatened to remove **Grok** over sexualized deepfakes under the pre-existing §1.2 (threat issued January 2026, disclosed April 2026 via a letter to US senators; the app was never removed — xAI remediated). The June 2026 paragraph codifies that practice. UGC/AI apps should maintain a documented moderation playbook **before** submission and keep takedown-response evidence for Resolution Center.
 
 **If your app has AI-generated content visible to users:**
 - Treat it as UGC: must have report/block/filter mechanisms (§1.2)
@@ -363,7 +366,7 @@ Fix: Document every non-obvious feature path in Notes for Review with specificit
 
 **Kids Category + AI:** Zero third-party analytics/advertising. AI features that could expose kids to inappropriate content are especially scrutinized.
 
-**Creator apps / age-gated content:** If the app allows creation or discovery of content that can exceed the app's age rating, require a way to flag that content and restrict access using verified or declared age. Keep **App Store Connect age rating** answers current with the [2026 age rating system](https://developer.apple.com/news/upcoming-requirements/?id=07242025a) and [definitions](https://developer.apple.com/help/app-store-connect/reference/age-ratings-values-and-definitions/).
+**Creator apps / age-gated content:** If the app allows creation or discovery of content that can exceed the app's age rating, require a way to flag that content and restrict access using verified or declared age. Keep **App Store Connect age rating** answers current with the [2026 age rating system](https://developer.apple.com/news/upcoming-requirements/?id=07242025a) and [definitions](https://developer.apple.com/help/app-store-connect/reference/age-ratings-values-and-definitions/). **July 9, 2026:** the questionnaire adds **social media capability** questions (redistribute, amplify, or interact with UGC via a feed or similar discovery surface) that drive iOS 27 **Time Allowances**; responses are **mandatory from September 2026** for new apps, updates, and notarization ([announcement](https://developer.apple.com/news/?id=tlur8uvi)).
 
 **Multi-platform targets (tvOS, watchOS, visionOS):** Privacy manifests and required-reason API rules apply per Apple docs across these platforms; validate each target's `Info.plist`, extensions, widgets, and embedded binaries separately.
 
@@ -506,6 +509,6 @@ Rejected → Read guideline clause cited exactly
 - **[REFERENCE.md](REFERENCE.md)** — Full rejection database with community case studies, Apple doc anchors, Reddit/StackOverflow patterns, fix code examples; **§5.2 / §5.1.5 / ads–push / export** pattern tables; **§5.3 gambling**, **§1.1 safety/speech**, **sandbox & system access** tables
 - **[EDGE-CASES.md](EDGE-CASES.md)** — AI policy, hot updates, privacy manifests, external payments, UGC edge cases, regulated domains
 - **[CHECKLIST.md](CHECKLIST.md)** — Printable pre-submission checklist and reviewer kit templates
-- **[ADDENDUM.md](ADDENDUM.md)** — **June 8, 2026 Guidelines + ADPLA revision** (4.3 spam tiers, 1.2 UGC enforcement, 4.5.3 Live Activities, §3.3.11 AI/ML), vibe coding crackdown (March 2026), age rating overhaul, visionOS requirements, app size limits, ITMS error codes, ATS exceptions, launch screen, code signing, TestFlight vs App Store review, inactive app removal, screenshot requirements, local network permission, notification timing, post-approval quality (§5.6.4), **Japan ADPLA Attachment 12** (alternative payments / out-of-app / marketplace)
+- **[ADDENDUM.md](ADDENDUM.md)** — **social media age-rating questions (July 9, 2026; mandatory Sept 2026)**, **Brazil commerce opening (June 18, 2026)**, **June 8, 2026 Guidelines + ADPLA revision** (4.3 spam tiers, 1.2 UGC enforcement, 4.5.3 Live Activities, §3.3.11 AI/ML), vibe coding crackdown (March 2026), age rating overhaul, visionOS requirements, app size limits, ITMS error codes, ATS exceptions, launch screen, code signing, TestFlight vs App Store review, inactive app removal, screenshot requirements, local network permission, notification timing, post-approval quality (§5.6.4), **Japan & Brazil ADPLA Attachment 12** (alternative payments / out-of-app / marketplace)
 
-**Maintenance:** Rejection statistics (e.g. 2024 transparency counts) should be refreshed when Apple publishes new annual reports; gate logic and guideline links stay authoritative until Apple updates the guidelines page.
+**Maintenance:** Rejection statistics (e.g. 2025 transparency counts) should be refreshed when Apple publishes new annual reports; gate logic and guideline links stay authoritative until Apple updates the guidelines page.

@@ -4,6 +4,40 @@ Material discovered during second-pass audit. These are real rejection causes an
 
 ---
 
+## BREAKING: Age Rating Questionnaire Adds Social Media Questions (July 9, 2026)
+
+**Source:** https://developer.apple.com/news/?id=tlur8uvi  
+**Deadline:** Responses **mandatory beginning September 2026**
+
+The App Store Connect age rating questionnaire now includes questions about your app's **social media capabilities** — defined as *"the ability to redistribute, amplify, or interact with user-generated content through a social feed or similar discovery method."*
+
+- Apps with social media capabilities receive a new **content descriptor** on the product page.
+- The answers place apps in the **Social Media** category of the new **Time Allowances** parental controls (iOS 27, iPadOS 27, macOS 27+) — **regardless** of the App Store category selected in App Store Connect ([Time Allowances announcement](https://developer.apple.com/news/?id=0d2gpmml)).
+- **Beginning September 2026**, responses are required when submitting **new apps or updates** to the App Store, **and** when submitting apps for **notarization** for alternative distribution.
+- The questions can be answered now — do it before September to avoid submission interruptions.
+
+**Who is affected:** anything with a feed, follower graph, sharing/reposting, or UGC discovery surface — including AI apps whose generated content is shared into a feed. Pair with the age-rating overhaul and §1.2 UGC gates below.
+
+---
+
+## BREAKING: Brazil — Alternative Distribution & Payments (June 18, 2026)
+
+**Source:** https://developer.apple.com/news/?id=umq9wxmm · https://developer.apple.com/news/  
+**Legal basis:** Agreement with Brazil's competition regulator **CADE** (Conselho Administrativo de Defesa Econômica)
+
+As of **iOS 26.5**, developers on the **Brazil storefront** can:
+
+- Distribute apps on **alternative app marketplaces** (and operate marketplaces)
+- Process payments for digital goods/services **outside Apple In-App Purchase** (**Alternative Payments**)
+- Use **Out-of-App Offers** to promote purchases outside the app
+- Fees follow the **Core Technology Commission (CTC)** model
+
+**ADPLA impact:** Attachment 12 was revised and retitled — it is now **"Additional Terms for iOS Apps in Japan, Brazil"**. Apple set a **July 6, 2026** deadline for accepting the updated agreement. Expect Japan-style mechanics (entitlements, StoreKit eligibility/disclosure flows, default-browser links, prominence parity) but **verify Brazil-specific Apple Materials** — entitlement names, minimum OS, commission rates, and reporting differ per territory.
+
+**Practical impact:** the external-purchase storefront tables in [SKILL.md](SKILL.md) Gate D and [EDGE-CASES.md](EDGE-CASES.md) include Brazil; audit Brazilian distribution the same way as the [Japan checklist](#japan-app-store--adpla-attachment-12-commerce--distribution) below.
+
+---
+
 ## BREAKING: June 8, 2026 — Guidelines + ADPLA Revision (WWDC week)
 
 **Source:** https://developer.apple.com/news/?id=a233fmpw  
@@ -210,11 +244,11 @@ Starting **June 18, 2026**, App Store age ratings are updated in **Australia** a
 
 ---
 
-## WATCH: WWDC 2026 (June 8–12, 2026)
+## WWDC 2026 (June 8–12, 2026) — concluded; follow-ups tracked
 
 **Source:** https://www.apple.com/newsroom/2026/05/apple-kicks-off-worldwide-developers-conference-on-june-8/
 
-WWDC 2026 keynote was **June 8, 2026**. ✅ The expected Guidelines + ADPLA revision landed the same day — see [June 8, 2026 revision](#breaking-june-8-2026--guidelines--adpla-revision-wwdc-week) at the top of this file (incorporated June 9, 2026). **Still watch through June 12 and beyond** for next-year SDK minimums (iOS 27 signals, likely an Xcode 27-era upload requirement around April 2027) and any new entitlement/privacy requirements announced in sessions.
+WWDC 2026 keynote was **June 8, 2026**. ✅ The expected Guidelines + ADPLA revision landed the same day — see [June 8, 2026 revision](#breaking-june-8-2026--guidelines--adpla-revision-wwdc-week). Post-WWDC follow-ups so far: **Brazil commerce opening (June 18)** and **social media age-rating questions (July 9, mandatory September 2026)** — both covered above — plus the **Sign in with Apple / iCloud+ Hide My Email domain unification** announced June 15, 2026: relay addresses move to a single shared domain, **`private.icloud.com`**, later this summer — update any backend allowlists or validators that hardcode `privaterelay.appleid.com`. Still expected: next-year SDK minimums (iOS 27 signals, likely an Xcode 27-era upload requirement around April 2027).
 
 ---
 
@@ -226,7 +260,7 @@ WWDC 2026 keynote was **June 8, 2026**. ✅ The expected Guidelines + ADPLA revi
 
 | Platform | Max Uncompressed App Size | Max Executable (__TEXT) | Notes |
 |----------|--------------------------|------------------------|-------|
-| iOS / iPadOS (iOS 9+) | 4 GB | 500 MB | — |
+| iOS / iPadOS (iOS 9+) | 4 GB | 80 MB (total __TEXT) | — |
 | macOS | 200 GB | — | — |
 | tvOS | 4 GB | 500 MB | — |
 | visionOS | 4 GB | 500 MB | — |
@@ -234,6 +268,8 @@ WWDC 2026 keynote was **June 8, 2026**. ✅ The expected Guidelines + ADPLA revi
 | App Clips (iOS 17+) | 100 MB | — | Digital invocations only |
 | App Clips (iOS 16) | 15 MB | — | — |
 | App Clips (< iOS 16) | 10 MB | — | — |
+
+> ⚠️ Apple's current table lists **80 MB** total `__TEXT` for iOS 9+ (tvOS/visionOS remain 500 MB). This is far below the historical 500 MB figure — re-verify on the live page before shipping unusually large binaries.
 
 ### Cellular download limit
 
@@ -264,25 +300,26 @@ func application(_ application: UIApplication,
 
 **Source:** https://developer.apple.com/help/app-store-connect/reference/screenshot-specifications
 
-### Mandatory iPhone screenshot sizes
+### iPhone screenshot sizes (required baseline: 6.9")
 
-You must provide screenshots for at least one of these sizes. Apple scales down from the largest provided.
+**6.9" (1320 x 2868) is the required size.** If not provided, the App Store scales from 6.5" (1284 x 2778). Smaller sizes are optional overrides.
 
-| Display | Dimensions (portrait) | Device Examples |
-|---------|----------------------|-----------------|
-| 6.9" | 1320 x 2868 | iPhone 15 Pro Max, 16 Pro Max |
-| 6.7" | 1290 x 2796 | iPhone 14 Pro Max, 15 Plus, 16 Plus |
-| 6.5" | 1284 x 2778 | iPhone 11 Pro Max, XS Max |
-| 6.1" | 1179 x 2556 | iPhone 14 Pro, 15 Pro, 16 Pro |
-| 5.5" | 1242 x 2208 | iPhone 8 Plus, 7 Plus (legacy) |
+| Display | Dimensions (portrait) | Status | Device Examples |
+|---------|----------------------|--------|-----------------|
+| 6.9" | 1320 x 2868 | **Required** | iPhone 17 Pro Max, 16 Pro Max, 15 Pro Max |
+| 6.5" | 1284 x 2778 | Fallback if 6.9" missing | iPhone 14 Plus, 13 Pro Max, XS Max |
+| 6.3" | 1179 x 2556 | Optional | iPhone 17 Pro, 16 Pro, 15 Pro |
+| 6.1" | 1170 x 2532 | Optional | iPhone 14, 13, 12 |
+| 5.5" | 1242 x 2208 | Optional (legacy) | iPhone 8 Plus, 7 Plus |
 
-### Mandatory iPad screenshot sizes (if app supports iPad)
+### iPad screenshot sizes (required baseline: 13", if app supports iPad)
 
-| Display | Dimensions (portrait) |
-|---------|-----------------------|
-| iPad Pro 12.9" | 2048 x 2732 |
-| iPad Pro 11" | 1668 x 2388 |
-| iPad 10.9" | 1640 x 2360 |
+| Display | Dimensions (portrait) | Status |
+|---------|-----------------------|--------|
+| 13" | 2064 x 2752 | **Required** |
+| 12.9" (older) | 2048 x 2732 | Optional |
+| 11" | 1488 x 2266 | Optional |
+| 10.5" | 1668 x 2224 | Optional |
 
 ### Screenshot rules
 
@@ -310,7 +347,7 @@ fastlane snapshot --devices "iPhone 16 Pro Max" "iPhone SE" "iPad Pro (12.9-inch
 
 ## visionOS-Specific Requirements
 
-**Source:** https://developers.apple.com/visionos/submit
+**Source:** https://developer.apple.com/visionos/submit
 
 ### App motion declaration (REQUIRED)
 
@@ -838,7 +875,7 @@ This means:
 
 ## Japan App Store — ADPLA Attachment 12 (commerce & distribution)
 
-**Source:** Apple Developer Program License Agreement, **Attachment 12** (Additional Terms for iOS Apps in Japan), as amended from time to time.
+**Source:** Apple Developer Program License Agreement, **Attachment 12** — retitled **"Additional Terms for iOS Apps in Japan, Brazil"** in the June 18, 2026 revision — as amended from time to time. For Brazil-specific terms, see [the Brazil section](#breaking-brazil--alternative-distribution--payments-june-18-2026) above.
 
 This is **contractual** and **territory-specific**. Always verify **Apple Materials** in App Store Connect and the developer portal before shipping; the ADPLA defers details to those materials.
 

@@ -2,7 +2,7 @@
 
 Complete rejection patterns with Apple documentation anchors, community case studies, and specific fixes.  
 **Authority**: Apple's App Review Guidelines (last updated June 8, 2026)  
-**Stats**: Apple reviewed 7,771,599 submissions in 2024; rejected ~1,931,400 (~24.9%).
+**Stats**: Apple reviewed more than 9.1 million submissions in 2025; rejected over 2 million (~1.2M new apps + ~800K pending updates) — [2025 App Store Transparency Report](https://www.apple.com/legal/app-store/transparency/2025/).
 
 ---
 
@@ -33,9 +33,9 @@ Complete rejection patterns with Apple documentation anchors, community case stu
 1. In ASC → Your App → In-App Purchases → select the product → set status to "Ready to Submit"
 2. In the submission form, check "Submit this in-app purchase for review" alongside the binary
 
-**Receipt validation — Apple-approved pattern:**
+**Receipt validation — legacy pattern** (the `/verifyReceipt` endpoint is **deprecated**; prefer **StoreKit 2** on-device verification + **App Store Server API**. Keep this only for legacy backends):
 ```swift
-// Production-first, sandbox fallback
+// Production-first, sandbox fallback (legacy /verifyReceipt only)
 func validateReceipt(data: Data) async throws -> ReceiptResponse {
     do {
         return try await verifyWith(endpoint: .production, receipt: data)
@@ -235,8 +235,10 @@ class StoreManager: ObservableObject {
 ```
 
 **External payment links — by storefront:**  
-- US storefront: External links/CTAs allowed without entitlement (current guidelines, Feb 2026)
+- US storefront: External links/CTAs allowed without entitlement (current guidelines, June 2026)
 - EU: Requires `StoreKitExternalPurchaseLinkEntitlement`; must use disclosure sheet
+- Japan: **Alternative Payments** / **Out-of-App Offers** with Apple-granted entitlement (iOS 26.2+, ADPLA Attachment 12)
+- Brazil: **Alternative Payments** / **Out-of-App Offers** with Apple-granted entitlement (iOS 26.5+, since June 18, 2026, ADPLA Attachment 12)
 - Netherlands dating apps: Separate entitlement program
 - South Korea: Separate entitlement; separate binary required
 
@@ -580,13 +582,24 @@ Apps must never:
 - §4.10: cannot monetize built-in capabilities
 - §5.6: manipulative behavior can lead to removal from the Developer Program
 
-**If you need a rating prompt, use Apple's API and keep it optional:**
+**If you need a rating prompt, use Apple's API and keep it optional** (`SKStoreReviewController` is deprecated since iOS 18 — use StoreKit's `AppStore.requestReview` / SwiftUI's `requestReview` environment value):
 ```swift
 import StoreKit
+import SwiftUI
 
+// SwiftUI
+struct RateAppButton: View {
+    @Environment(\.requestReview) private var requestReview
+
+    var body: some View {
+        Button("Rate this app") { requestReview() }
+    }
+}
+
+// UIKit
 @MainActor
 func requestReviewIfAppropriate(in scene: UIWindowScene) {
-    SKStoreReviewController.requestReview(in: scene)
+    AppStore.requestReview(in: scene)
 }
 ```
 
@@ -605,6 +618,7 @@ Apple updated its age-rating system and requires developers to answer new age-ra
 #### Important 2026 changes
 - Ratings were automatically updated for Apple platforms running the new OS family
 - Developers must complete the updated age-rating questionnaire in App Store Connect
+- **July 9, 2026**: the questionnaire adds **social media capability** questions (feeds iOS 27 **Time Allowances**); responses **mandatory from September 2026** for new apps, updates, and notarization submissions ([announcement](https://developer.apple.com/news/?id=tlur8uvi))
 - Creator apps must let users identify content exceeding the app's age rating
 - Creator apps must restrict underage access using **verified or declared age**
 
@@ -1096,7 +1110,7 @@ https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-rev
 
 | Source | URL | Authority |
 |--------|-----|-----------|
-| App Review Guidelines (Feb 2026) | https://developer.apple.com/app-store/review/guidelines/ | Primary |
+| App Review Guidelines (June 8, 2026) | https://developer.apple.com/app-store/review/guidelines/ | Primary |
 | Safety (§1.x hub) | https://developer.apple.com/app-store/review/guidelines/#safety | Primary |
 | App Review preparation | https://developer.apple.com/app-store/review/ | Primary |
 | App Review overview | https://developer.apple.com/distribute/app-review | Primary |

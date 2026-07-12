@@ -20,12 +20,12 @@ Copy and use these checklists before every submission.
 - [ ] Quick scan: `strings YourApp | grep -E 'prefs:root|App-Prefs'` returns nothing suspicious
 - [ ] Code signing: entitlements match provisioning profile and App ID capabilities (debug with `codesign -d --entitlements :- YourApp.app`)
 - [ ] LaunchScreen storyboard present — verify `UILaunchStoryboardName` in Info.plist (required since April 2020)
-- [ ] Screenshots: exact pixel dimensions for all targeted device sizes (1px off fails upload)
-- [ ] App binary under 4 GB total; watchOS under 75 MB; aim under 200 MB for cellular download conversion
+- [ ] Screenshots: exact pixel dimensions for all targeted device sizes (1px off fails upload); required baseline **6.9" iPhone (1320x2868)** and **13" iPad (2064x2752)**
+- [ ] App binary under 4 GB total (iOS executable ≤ 80 MB total __TEXT per Apple's current table); watchOS under 75 MB; aim under 200 MB for cellular download conversion
 - [ ] ATS: no global `NSAllowsArbitraryLoads` without documented justification; prefer domain-specific `NSExceptionDomains`
 - [ ] AASA file (if using Universal Links): accessible without auth/redirects at `/.well-known/apple-app-site-association`
 - [ ] visionOS: app motion declaration completed in ASC (required before submission)
-- [ ] Age rating questionnaire re-answered for current build content (new 13+/16+/18+ categories since July 2025)
+- [ ] Age rating questionnaire re-answered for current build content (new 13+/16+/18+ categories since July 2025; **social media capability** questions answered — mandatory from **September 2026**, also for notarization)
 
 ### Gate B — App Completeness
 
@@ -59,13 +59,13 @@ Copy and use these checklists before every submission.
 ### Gate D — Payments
 
 - [ ] All digital feature/content unlocks use StoreKit IAP
-- [ ] No external purchase CTAs (unless US storefront and current guidelines allow)
+- [ ] No external purchase CTAs (US storefront: allowed without entitlement; EU / Japan / Brazil / South Korea / Netherlands-dating: only with Apple-granted entitlements)
 - [ ] Subscription paywall shows: price, billing period, auto-renewal disclosure, trial terms
 - [ ] The **amount actually billed** is the most prominent pricing element in the paywall
 - [ ] "Restore Purchases" button present in subscription/paywall UI
 - [ ] In-app path exists to manage/cancel subscriptions (system UI or clear help path)
 - [ ] Paywall loads products correctly from a fresh install (tested on clean device)
-- [ ] Receipt validation uses production-first, sandbox-fallback pattern
+- [ ] Receipt validation: StoreKit 2 / App Store Server API preferred (legacy `/verifyReceipt` is deprecated; if still used, production-first with sandbox fallback)
 - [ ] No charging for built-in OS capabilities (push notifications, iCloud storage, camera)
 - [ ] No fake scarcity, misleading countdowns, or visually deceptive trial emphasis
 
@@ -152,7 +152,7 @@ Copy and use these checklists before every submission.
 - [ ] **Recording / Sensitive Content Analysis**: Obvious **recording** indicator when capturing mic/camera/screen; **no** uploading off-device flags that Sensitive Content Analysis found nudity (§3.3.3)
 - [ ] **Real-time nav / WeatherKit**: EULA includes required **disclaimer** strings if the app qualifies (ADPLA §3.3.3(F), WeatherKit Attachment 8)
 - [ ] **US one-time digital IAP**: Pre-purchase **license** disclosure + link to **Apple Media Services** terms where required (Attachment 2 §3.2)
-- [ ] **Japan storefront**: If using **Alternative Payment Processing** / **Out-of-App Offers**, entitlement + **StoreKit** flows + **default browser** (not web view) for outbound purchases — see ADDENDUM.md Japan section
+- [ ] **Japan / Brazil storefronts**: If using **Alternative Payments** / **Out-of-App Offers**, entitlement + **StoreKit** flows + **default browser** (not web view) for outbound purchases — see ADDENDUM.md Japan & Brazil sections
 - [ ] **macOS notarization**: Marketing does **not** claim Apple “approved” or “verified security” of the app (§5.3)
 - [ ] **ADPLA §3.1(d)**: To best of your knowledge, metadata and app do not infringe Apple or third-party IP (including music, video, photography, logos, data rights)
 
@@ -532,5 +532,6 @@ echo "✅ Check complete. Review warnings above."
 | "App introduces or changes features via code" | 2.5.2 | Remove vibe coding / code execution; see ADDENDUM.md |
 | "Launch screen not found" | Build requirement | Add LaunchScreen storyboard; set UILaunchStoryboardName |
 | "Age rating inconsistent with content" | 2.3 / Age rating | Re-answer questionnaire; use developer override for COPPA |
+| Submission interrupted: unanswered age rating questions | Age rating (social media questions, Sept 2026) | Answer the updated questionnaire incl. social media capability questions in ASC |
 | "App motion information required" | visionOS submission | Complete app motion declaration in App Store Connect |
 | NSAllowsArbitraryLoads justification needed | ATS / 5.1 | Switch to domain-specific exceptions; document rationale |
