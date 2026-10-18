@@ -14,18 +14,23 @@ Apple does not ban AI features. The specific rules that apply:
 > *"You must clearly disclose where personal data will be shared with third parties, **including with third-party AI**, and obtain explicit permission before doing so."*
 
 This means: if your app sends user data to OpenAI, Anthropic, Google Gemini, Mistral, or any LLM provider, you must:
+
 1. Disclose this in your privacy policy (naming the provider)
 2. Obtain explicit user consent before transmitting personal data
 3. Declare this in the App Privacy nutrition label as "Data Shared with Third Parties"
 
 **On-device vs. server-side AI:**
+
 - On-device inference (Core ML, Apple Intelligence, local LLM): data doesn't leave the device → lower privacy burden
 - Server-side inference: treated as data transmitted off-device → full privacy disclosure required
 
 ### AI-generated content and UGC rules (§1.2)
 
+Since **October 16, 2026**, §1.2 names this directly: it covers apps that let users *"create, generate, upload, share, or otherwise contribute content"* — *"social media, user-generated content platforms, and AI content creation apps"* — and lists **nonconsensual intimate imagery** among the harms to prevent.
+
 If AI generates content that users can see (chatbot responses, generated images, AI-written posts):
-- Treat the AI output as UGC for moderation purposes
+
+- Treat the AI output as UGC for moderation purposes (now explicit, not an interpretation)
 - Must have: report mechanism, filter mechanism, block mechanism, contact info
 - AI chatbots that can discuss inappropriate topics must include content filtering
 - Age-gating required if AI can produce mature content
@@ -33,6 +38,8 @@ If AI generates content that users can see (chatbot responses, generated images,
 **Rejection pattern:** App with AI chatbot rejected because reviewer prompted it to produce harmful content and there was no filtering or reporting mechanism.
 
 **Enforcement escalation (June 8, 2026):** §1.2 now states developers are responsible for **removing** violating content; Apple can demand a **compliance-improvement plan**, remove the app until improvements are demonstrated, and treat egregious/repeated behavior as grounds for **immediate removal from the App Store and the Apple Developer Program**. For AI apps this means moderation must work operationally (actual takedowns), not just exist as UI. Precedent: Grok removal threat (April 2026). See [ADDENDUM.md — June 8, 2026 revision](ADDENDUM.md#breaking-june-8-2026--guidelines--adpla-revision-wwdc-week).
+
+**NCII and bait-and-switch (October 16, 2026):** Apple's announcement says content moderation must now **proactively prevent and remove** nonconsensual intimate imagery, *"including imagery generated using AI tools"*, and that developers who fail to implement safeguards or don't fix violations after notice risk a **Developer Code of Conduct** violation (account-level). "Nudification" apps — generating sexual images of real people without consent — were already banned as pornography (§1.1.4); apps that hide such a capability during review and switch it on after approval now also hit **§2.5.19** (hidden/dormant features → app removal + account termination). Practical floor for image/video/avatar generators: block sexual or intimate output involving real, identifiable people (uploads and prompts), filter outputs, make NCII reports a priority queue, and keep evidence of takedowns. See [ADDENDUM.md — October 16, 2026 revision](ADDENDUM.md#breaking-october-16-2026--app-review-guidelines-revision-bait-and-switch-ncii-creative-assets).
 
 ### On-device AI and Apple Intelligence (iOS 18+)
 
@@ -66,6 +73,7 @@ Apple has been increasingly scrutinous about "AI agent" apps that claim to perfo
 ### AI + age-rating update edge case (2026)
 
 Apple's 2026 age-rating update introduces a practical requirement for creator-style AI apps: if users can generate or encounter content that can exceed the app's age rating, the app needs more than just an App Store metadata answer. Apple now expects creator apps to:
+
 - let users identify content that exceeds the app's age rating, and
 - restrict underage access using verified or declared age.
 
@@ -81,6 +89,7 @@ Apple now documents multiple distribution channels (App Store, EU/Japan alternat
 For this skill, treat **App Store Review Guidelines as authoritative for App Store submissions** and do not assume notarization checks are identical.
 
 **Practical rule:**
+
 - If the team ships to App Store + alternative channels, run two compliance profiles:
   1) App Store profile (full guideline checks),
   2) Notarization/alternative distribution profile (channel-specific requirements).
@@ -96,11 +105,13 @@ This avoids false positives/false negatives when teams copy one checklist across
 > *"Your app may not require users to enable system functionalities (e.g. push notifications, location services, tracking) in order to access functionality, content, use the app, or receive monetary or other compensation."*
 
 **Common violations:**
+
 - "Enable location to continue using the app" as a hard gate (even if location makes the feature better)
 - "Allow notifications to access premium content" as a condition of subscription
 - Offering gift cards or discounts in exchange for enabling ATT tracking
 
 **Correct pattern:**
+
 ```swift
 // ❌ Wrong — blocking UI that gates access on permission grant
 if locationAuthorizationStatus == .notDetermined {
@@ -154,7 +165,7 @@ struct LocationPermissionExplainerView: View {
 ### Sensitive permissions that trigger extra scrutiny
 
 | Permission | Apple's scrutiny level | Common rejection pattern |
-|------------|----------------------|-------------------------|
+| ------------ | ---------------------- | ------------------------- |
 | Location (always) | Very high | Background location without clear necessity |
 | Camera | High | Purpose string doesn't explain specific use |
 | Microphone | High | App records without user knowing |
@@ -191,6 +202,7 @@ Requesting `location` background mode when app only needs it while in foreground
 ### Apple now treats trust failures as first-class enforcement risk
 
 The skill previously covered subscription clarity, but Apple goes further under the Developer Code of Conduct:
+
 - apps must not prey on users,
 - trick them into unwanted purchases,
 - force unnecessary data sharing,
@@ -211,6 +223,7 @@ This is broader than classic guideline-matching. Even if a flow appears technica
 ### Safe rule
 
 Whenever a flow involves billing, consent, or user data:
+
 1. Put the real consequence first
 2. Make the billed amount or data-sharing consequence explicit
 3. Keep opt-out / restore / manage paths close at hand
@@ -233,7 +246,9 @@ Primary: [Manage EU DSA trader requirements](https://developer.apple.com/help/ap
 
 ## Alternative distribution & Notarization (EU / Japan)
 
-If the same codebase ships **outside** the classic App Store (alternative marketplaces, Web Distribution, Japan marketplace rules), Apple applies **Notarization** and a **highlighted subset** of the App Review Guidelines. Malware scanning and safety rules still apply. Policy can **diverge** from full App Store review (e.g. different entitlement programs). Always cross-check the guidelines page with **"Highlight Notarization Review Guidelines Only"** and [DMA / EU support](https://developer.apple.com/support/dma-and-apps-in-the-eu/).
+If the same codebase ships **outside** the classic App Store (alternative marketplaces, Web Distribution, Japan and Brazil marketplace rules), Apple applies **Notarization** and a **highlighted subset** of the App Review Guidelines. Malware scanning and safety rules still apply. Policy can **diverge** from full App Store review (e.g. different entitlement programs). Always cross-check the guidelines page with **"Highlight Notarization Review Guidelines Only"** and [Apps in the EU](https://developer.apple.com/support/apps-in-the-eu/).
+
+Alternative distribution is **not** an escape hatch for the worst violations: misleading marketing (§2.3.1), apps facilitating trafficking or child exploitation (§5, October 16, 2026), and non-compliant VPN/MDM apps (§5.4, §5.5) are **blocked from installing via alternative distribution** as well as removed from the App Store, and Program removal ends every channel at once.
 
 ---
 
@@ -269,10 +284,28 @@ struct RemoteConfigManager {
 }
 
 // ✅ Content-driven updates (articles, products, images) — always OK
-// ✅ Feature flag gating (show/hide built-in views) — OK if not hiding during review
+// ✅ Feature flag gating (show/hide built-in views) — OK only if every flagged
+//    feature was in the reviewed build, reachable by App Review, and listed in
+//    Notes for Review (§2.5.19)
 // ✅ A/B testing via remote config of content/copy — OK
 // ✅ Paywall remote config (changing prices, copy) — OK if no new code executed
+//    and pricing stays truthful (§3.1.2, §5.6)
+// ❌ Remote "mode" that turns the app into something else after approval
+//    (e.g. a utility that starts loading casino or adult web content) —
+//    bait-and-switch: §2.5.19 + ADPLA §3.2(3) → removal + account termination
 ```
+
+### Dormant code vs. legitimate staged rollout (§2.5.19, October 16, 2026)
+
+| Pattern | Verdict |
+| --- | --- |
+| Feature built, reviewed, and listed in Notes; rolled out to 10% → 100% of users via flag | ✅ Fine |
+| Feature shipped "dark" in the binary, flag OFF during review, not mentioned in Notes | ❌ Hidden/dormant feature |
+| Kill switch that disables a reviewed feature (outage, legal takedown) | ✅ Fine — removing functionality isn't hiding it |
+| Behavior keyed to "is this App Review?" (sandbox receipt, Apple IP ranges, reviewer locale, install date) | ❌ Review cloaking — termination risk |
+| Obfuscation of licensing/anti-tamper code, everything user-facing documented | ⚠️ Allowed by the text, but disclose it in Notes |
+| Obfuscated strings/selectors that hide an undisclosed capability | ❌ Named in §2.5.19 → removal + account termination |
+| WebView or mini-app catalog that later serves a different kind of app | ❌ Unless the catalog was reviewed under §4.7 and its software follows the guidelines |
 
 ### Rejected hot-update patterns
 
@@ -312,6 +345,7 @@ fetch('https://myserver.com/logic.js')
 ### §4.7 Mini-apps / Chatbots / Plug-ins — Allowed but with full compliance
 
 §4.7 explicitly allows:
+
 - HTML5/JavaScript mini apps and mini games
 - Streaming games
 - Chatbots
@@ -319,10 +353,11 @@ fetch('https://myserver.com/logic.js')
 - Retro game emulators (can download ROMs user owns)
 
 **BUT they must comply with:**
+
 - Full §5.1 privacy rules (including for the mini-app's own data collection)
 - §1.2 UGC moderation requirements (if mini-app has user content)
 - §3.1 payment rules (digital goods in mini-apps need IAP)
-- Cannot use mini-apps to bypass App Review (feature added post-review via mini-app = rejection)
+- Cannot use mini-apps to bypass App Review (feature added post-review via mini-app = rejection; if it was deliberately hidden, §2.5.19 removal + account termination)
 
 ---
 
@@ -334,45 +369,57 @@ fetch('https://myserver.com/logic.js')
 
 **Why:** The US storefront exception is real but limited. Most developers distribute globally.
 
-### Current rules by region (July 2026)
+### Current rules by region (October 2026)
+
+**§3.1.1(a) wording since October 16, 2026:** entitlement links go to a **"permitted destination"** (approved destinations vary by region), the Music Streaming Services Entitlement is folded into the StoreKit External Purchase Link bullet, and each entitlement covers specific storefronts **and only certain platforms** in them.
 
 **United States:**
+
 - External links/CTAs: ✅ No entitlement needed (US storefront only)
 - BUT: Apple still shows an information sheet to users before they leave the app
 - Must not engage in "misleading marketing practices, scams, or fraud"
 - If user leaves to external purchase and returns, app must handle entitlements via server check
 
-**European Union (iOS/iPadOS):**
-- StoreKit External Purchase Link Entitlement required
-- Limited to specific storefronts per entitlement agreement
-- Must use Apple's disclosure sheet before external navigation
+**European Union (since October 1, 2026 — ADPLA Attachment 14):**
+
+- Apps on EU storefronts (iOS, iPadOS, macOS, tvOS, visionOS, watchOS) may offer **in-app alternative payment processing** and/or **out-of-app offers** (website, alternative marketplace, or another app; with or without an actionable link) **alongside** Apple IAP
+- Requires accepting the updated ADPLA (Account Holder) to get the EU alternative-payments entitlement; the old EU External Purchase Link addendum is gone
+- Keep the chosen mix of payment options for **12 months**
+- Child safety: Kids category → alternative payments behind a parental gate and no web out-of-app offers; under 13 (or local consent age) → parental gate, no out-of-app offers; 13–17 → both behind a parental gate
+- Commission: 26% IAP / 20% alternative payments / 15% out-of-app offers via actionable link (7-day window), with 15% / 10% / 10% reduced rates — see [ADDENDUM.md](ADDENDUM.md#eu-unified-business-terms--adpla-attachment-14-effective-october-1-2026)
 
 **Netherlands (dating apps):**
+
 - Separate entitlement program specific to dating category
 - External payment links allowed for dating apps only
-- Reference: https://developer.apple.com/support/storekit-external-entitlement/
+- Reference: <https://developer.apple.com/support/storekit-external-entitlement/>
 
 **South Korea:**
+
 - StoreKit External Purchase Entitlement for South Korea
 - Requires separate binary distributed only in South Korea App Store
 - Must use required StoreKit APIs
 
 **Japan:**
+
 - **Alternative Payments** and/or **Out-of-App Offers** with Apple-granted entitlement (iOS 26.2+)
 - IAP must stay at least as prominent; out-of-app links must open the default browser (not a web view)
 - ADPLA Attachment 12 — see [ADDENDUM.md Japan section](ADDENDUM.md#japan-app-store--adpla-attachment-12-commerce--distribution)
 
 **Brazil (since June 18, 2026):**
+
 - Alternative app marketplaces, **Alternative Payments**, and **Out-of-App Offers** with Apple-granted entitlements (iOS 26.5+, CADE agreement)
 - **Core Technology Commission** applies; terms in ADPLA Attachment 12 ("Japan, Brazil") — see [ADDENDUM.md Brazil section](ADDENDUM.md#breaking-brazil--alternative-distribution--payments-june-18-2026)
 
 **Everywhere else:**
+
 - External purchase links/CTAs: ❌ Not allowed
 - "Reader app" link entitlement: ✅ Available for qualifying reader apps (website link for account management only, not purchase)
 
 ### Reader App entitlement — what qualifies
 
 A "reader app" provides access to previously purchased content:
+
 - Streaming music services
 - Streaming video services
 - Digital book/magazine readers
@@ -380,6 +427,7 @@ A "reader app" provides access to previously purchased content:
 - News/article apps
 
 Does NOT qualify:
+
 - Apps where users make purchases of new digital content inside the app
 - Social media apps
 - Games
@@ -423,6 +471,7 @@ Apple's guidelines (§1.2) contain an explicit allowance:
 This is specifically "via your website" — NOT via an in-app setting. The on/off control must be on your web platform.
 
 **Pattern that passes:**
+
 1. NSFW content hidden by default in app
 2. User visits website → account settings → enables "Mature Content"
 3. App fetches user preference from server → unlocks NSFW content display
@@ -431,11 +480,13 @@ This is specifically "via your website" — NOT via an in-app setting. The on/of
 ### Gambling gray zone
 
 **What looks like gambling but may pass:**
+
 - "Skill-based" competitions with prizes (varies by jurisdiction; get legal review)
 - Prediction markets (heavy scrutiny; needs legal compliance)
 - Fantasy sports (varies by jurisdiction)
 
 **What definitely doesn't pass:**
+
 - Real-money wagering without proper licensing and geo-restriction
 - Simulated casino games that offer real prizes
 - Binary options
@@ -449,12 +500,14 @@ Apps that use satire as a shield for defamatory content will still be rejected. 
 ### Medical claims (§1.4.1)
 
 **Always rejected:**
+
 - "Diagnoses [condition] using your iPhone camera"
 - "Measures blood pressure with no hardware"
 - "AI detects cancer from photos"
 - Any claim that requires FDA/CE clearance if you don't have it
 
 **Passes with proper disclosure:**
+
 - "This app is not a medical device and is for informational purposes only"
 - "Consult your healthcare provider before making medical decisions"
 - Features that track/log health data without making diagnostic claims
@@ -500,6 +553,7 @@ These are real exceptions, not loopholes:
 ### When reviewers get it wrong (appeal-worthy)
 
 Enterprise apps using Okta/SAML have been rejected with Sign in with Apple requirement. This is a reviewer error — the enterprise exception applies. Include in Notes for Review:
+
 ```
 Note: This app is an enterprise application distributed to employees of [Company]. 
 Users authenticate via [Company]'s enterprise identity provider (Okta/SAML). 
@@ -516,30 +570,42 @@ in with an existing enterprise account" per §4.8 exception criteria.
 Apple compares screenshots to the actual app during review. If redesigned UI was shipped but screenshots still show the old design → 2.3 violation.
 
 **Automation recommendation:**
+
 ```bash
 # Fastlane snapshot to auto-generate screenshots before each submission
 fastlane snapshot
 ```
 
-### "What's New" generic descriptions rejected
+### Generic "What's New" and Notes for Review text
 
-**Rejected:** "Bug fixes and performance improvements"  
-**Rejected:** "Updated app for better experience"  
-**Required:** "Fixed crash when opening Settings on iOS 17.2; improved load time on profile page by 40%; added support for Dynamic Island on iPhone 15 Pro"
+Two different rules, often mixed up:
 
-Apple guidelines state: *"All new features, functionality, and product changes must be described with specificity in the Notes for Review section... generic descriptions will be rejected."*
+- **"What's New" (§2.3.12):** *"Simple bug fixes, security updates, and performance improvements may rely on a generic description, but more significant changes must be listed in the notes."* So "Bug fixes and performance improvements" is fine for a release that really is only that — and a rejection risk when the build adds features.  
+  **Rejected for a feature release:** "Updated app for better experience"  
+  **Better:** "Added offline mode for saved articles; fixed a crash when opening Settings."
+- **Notes for Review (§2.3.1(a)):** *"All new features, functionality, and product changes must be described with specificity in the Notes for Review section of App Store Connect (generic descriptions will be rejected) and accessible for review."* Leaving a shipped feature out of the notes now also risks **§2.5.19** (undocumented features → removal + account termination).
+
+### Screenshots: the majority rule (§2.3.3)
+
+App Review approves a screenshot set only if **more than half** of the screenshots for each device show the app in use (2 of 3, 3 of 4, ...). Splash art, benefit statements, and marketing frames are fine in the minority; login-only or splash-only sets fail. Brand or seasonal art without app UI belongs in **creative assets** (§2.3.14), which have their own rules: no specific or discounted prices, no references to other apps meant to mislead, no unverifiable claims, 4+ appropriate.
 
 ### Keywords and title stuffing
 
 Rejected patterns:
-- Competitor app names in keywords
+
+- Competitor app names in keywords (§2.3.7; Apple's 4.1 guidance: no popular app names or trademarked terms in **any** metadata field)
+- Another developer's icon, brand, or product name in your **app name or icon** without their approval (§4.1(c)) — e.g. "[Popular App] Downloader", "Editor for [Brand]"
+- Names chosen to be confusingly similar to an existing app, or registered just to block others (name squatting — ADPLA §3.2)
 - "Free", "Best", "#1" in app name or subtitle
 - Excessive keyword repetition
 - Category names as keywords (App Store already categorizes your app)
 
+Repeated copycat or impersonation submissions get the **account** closed, not just the app rejected ([Apple 4.1 guidance](https://developer.apple.com/help/app-review/guideline-reference/4-1-prevent-copycat-rejection)).
+
 ### Age rating metadata is now operational, not just descriptive
 
 Because Apple changed the age-rating system in 2026, stale App Store Connect answers can now interrupt submissions. For apps with UGC or AI generation, re-check age-rating responses when:
+
 - adding chat or image generation,
 - allowing mature/user-uploaded content,
 - adding social sharing,
@@ -553,12 +619,14 @@ Because Apple changed the age-rating system in 2026, stale App Store Connect ans
 Field evidence (StackOverflow/dev.to) shows some 4.2 rejections resolve after a clear, feature-by-feature reviewer response.
 
 **What tends to work:**
+
 1. Enumerate each native workflow in bullet form (not marketing language).
 2. Provide exact in-app navigation path for every claimed feature.
 3. Attach short video walking all tabs/screens.
 4. Ask a precise clarification question: \"Which specific flow is considered insufficiently app-like?\"
 
 **What tends to fail:**
+
 - Generic appeals (\"our app is useful\"),  
 - Arguing popularity/download counts without feature evidence,  
 - Re-submitting same binary with no reviewer guidance updates.
@@ -572,6 +640,7 @@ Field evidence (StackOverflow/dev.to) shows some 4.2 rejections resolve after a 
 When reviewers report issues you cannot reproduce:
 
 **Packet contents:**
+
 - Issue statement mapped to exact guideline clause
 - Repro path with numbered steps
 - Temporary diagnostics summary (non-PII)
@@ -594,7 +663,10 @@ When community advice conflicts with Apple's guidelines, apply this resolution o
 6. **Older blog posts / guides** → Treat as potentially outdated
 
 **Common contradictions:**
-- "External payment links are now allowed" → Partially true; only US storefront, and only if meeting current rules
+
+- "External payment links are now allowed" → Partially true; without an entitlement only on the US storefront; elsewhere only with region- and platform-specific entitlements (EU, Japan, Brazil, South Korea, Netherlands dating)
+- "Apple banned code obfuscation" → False; §2.5.19 bans using obfuscation (or anything else) to **hide features**. Obfuscating IP is fine if every capability is documented
+- "Only the October 2026 update made fake reviews and copycats bannable" → False; those rules (§3 intro, §5.6.3, §4.1) were already there. What's new is §2.5.19 for hidden/dormant code and ADPLA §3.2(3) for deceptive post-review changes
 - "You don't need privacy policy if you don't collect data" → False; always required
 - "Subscription apps don't need IAP if B2B" → False unless meeting specific exemption criteria
 - "Sign in with Apple isn't required if I use Firebase" → Depends on whether Firebase auth uses third-party social login as primary; if it does, SiwA required
@@ -606,7 +678,7 @@ When community advice conflicts with Apple's guidelines, apply this resolution o
 ### When to appeal vs. fix and resubmit
 
 | Scenario | Recommendation |
-|----------|---------------|
+| ---------- | --------------- |
 | Reviewer made factual error about your app's behavior | Appeal with evidence (screenshots, video) |
 | Rejection based on guideline that has an exception you qualify for | Appeal citing exact exception text |
 | Policy is clear and you violated it | Fix and resubmit; don't waste appeal |
@@ -636,10 +708,15 @@ We welcome any clarification from App Review.
 
 ### What appeals cannot fix
 
-- Clear violations of content policies (pornography, illegal content)
+- Clear violations of content policies (pornography, illegal content, NCII)
 - Safety issues (malware, data theft)
-- Repeated manipulation of the review process
+- Repeated manipulation of the review process, hidden/dormant features, bait-and-switch (§2.5.19)
+- Review or ranking manipulation (§3 intro, §5.6.3), repeated copycats or impersonation (§4.1)
 - Developer Code of Conduct violations
+
+**Account terminations:** you can appeal while termination is **pending**. Once an account is terminated, the appeal form is the wrong channel — §5.6 lets you submit a **written statement of planned improvements**; Apple restores the account only if it approves the plan and confirms the changes ([Apple: appeals](https://developer.apple.com/help/app-review/after-submitting-for-review/appeal-to-the-app-review-board)).
+
+**Appeal mechanics (Apple, 2026):** reply to the rejection/removal message first; then one appeal per rejected or removed app (one form covers up to five apps), addressing **every** cited guideline point by point; don't appeal requests for more information, and don't appeal after you've already fixed and resubmitted.
 
 ### Process levers developers often overlook
 
@@ -713,6 +790,7 @@ xcrun altool --validate-app \
 From Apple's own App Review team talks and community evidence:
 
 **What reviewers actually do:**
+
 1. Test on physical device (not Simulator)
 2. Follow instructions in App Review Notes
 3. Test like a user, not a developer
@@ -723,6 +801,7 @@ From Apple's own App Review team talks and community evidence:
 8. Evaluate whether pricing, consent, and account flows feel trustworthy and understandable
 
 **What triggers extra scrutiny:**
+
 - First submission of a new category/concept
 - Significant new features in an update
 - Subscription model being introduced
@@ -735,6 +814,7 @@ From Apple's own App Review team talks and community evidence:
 - Apps submitted by an entity that doesn't clearly match the regulated service provider
 
 **What reduces scrutiny:**
+
 - Long history of clean submissions from the same developer account
 - Detailed, accurate App Review Notes
 - Quick responses to reviewer questions via Resolution Center

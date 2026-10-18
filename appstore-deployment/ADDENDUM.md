@@ -4,9 +4,195 @@ Material discovered during second-pass audit. These are real rejection causes an
 
 ---
 
+## BREAKING: October 16, 2026 — App Review Guidelines Revision (bait-and-switch, NCII, creative assets)
+
+**Sources:** <https://developer.apple.com/news/?id=92th7e5i> (change list) · <https://developer.apple.com/news/?id=vvzx6cul> ("Strengthening App Review Guidelines against nonconsensual intimate imagery and bait-and-switch apps")  
+**Verified:** diffed against the June 8, 2026 text (Wayback Machine snapshot of October 15, 2026). Apple publishes translations within a month.
+
+### What changed
+
+| Guideline | Change | Skill gate |
+| --- | --- | --- |
+| Before You Submit | New item: *"Provide required documentation for apps and features that require regulatory approval."* Links added to new App Review Help pages (testing on compatible devices, configuring IAPs for review, providing information for a complete review); App Review Help added to the documentation list | B |
+| 1.2 | Scope rewritten to apps that let users *"create, generate, upload, share, or otherwise contribute content"* — explicitly **social media, UGC platforms, and AI content creation apps**; **nonconsensual intimate imagery** named; failing to implement safeguards or to remediate after notice may violate the **Developer Code of Conduct** | G, L |
+| 2.3.1(a) | Opening sentence on hidden/dormant/undocumented features removed (moved to 2.5.19); Notes-for-Review specificity and misleading-marketing rules unchanged | E |
+| 2.3.3 | Links to new screenshot guidance (more than half of each device's screenshots must show the app in use) | A, E |
+| **2.3.14 (new)** | Creative assets (product page header, search results) | E |
+| **2.5.19 (new)** | Hidden, dormant, or undocumented features; hiding features in the binary *"such as through code obfuscation or other methods"* → app removal + developer account termination | F, L |
+| 3.1.1(a) | Links go to a **"permitted destination"** (approved destinations vary by region); Music Streaming Services Entitlement bullet removed and folded into the StoreKit External Purchase Link bullet ("where permitted"); entitlements limited to specific storefronts **and certain platforms** in each | D |
+| 4.1 | Text unchanged; now links to Apple's copycat & impersonation guidance | E, L |
+| 5 (intro) | Apps found to facilitate human trafficking and/or child exploitation: authorities notified **and** the app is removed from the App Store **and blocked from alternative distribution** | K, L |
+| 5.1.1(ii) | Links to new purpose-string guidance | C |
+| After You Submit | Links to review-status, expedite, contact, appeal, guideline-suggestion, and Bug Fix Submission help pages | I |
+| Throughout | Editorial: "e.g." → "such as" / "for example"; no change in meaning | — |
+
+### New text (verbatim)
+
+**2.5.19:**
+> *"Don't include any hidden, dormant, or undocumented features in your app; your app's functionality should be clear to end users and App Review. Attempting to hide undocumented features in your app binary, such as through code obfuscation or other methods, is grounds for removal of your app from the App Store and termination of your developer account."*
+
+**1.2 (opening):**
+> *"Apps that enable users to create, generate, upload, share, or otherwise contribute content present particular challenges, including intellectual property infringement, nonconsensual intimate imagery, and anonymous bullying. This includes social media, user-generated content platforms, and AI content creation apps. To prevent abuse, such apps must include: [filtering, reporting with timely responses, blocking, published contact information]"*
+
+**1.2 (sentence added to the June 2026 enforcement paragraph):**
+> *"Developers who fail to implement appropriate safeguards or fail to remediate identified violations after notice may be considered in violation of the Developer Code of Conduct."*
+
+**2.3.14:**
+> *"Creative assets allow you to highlight the value of your app in new ways compared to app-in-use screenshots and preview videos, and can be used across the App Store, including the product page header and in search results. Creative assets must pertain to your app's content and functionality or overarching brand, follow standard metadata guidelines, and be appropriate for all audiences. They should not include inappropriate content, references to other apps with an intent to mislead, unverifiable product claims, or specific or discounted pricing information."*
+
+**3.1.1(a) (StoreKit External Purchase Link Entitlements):**
+> *"apps on the App Store in specific regions may offer in-app purchases and also use a StoreKit External Purchase Link Entitlement or, where permitted, a Music Streaming Services Entitlement to include a link to a permitted destination that informs users of other ways to purchase digital goods or services. Approved destinations may vary by region. [...] The entitlements are limited to use only in specific storefronts of the App Store, and only on certain platforms in each of those storefronts."*
+
+**5 (Legal intro, last sentence):**
+> *"In extreme cases, such as apps that are found to facilitate human trafficking and/or the exploitation of children, appropriate authorities will be notified and the apps will be removed from the App Store and blocked from alternative distribution."*
+
+### Why Apple did it
+
+From the announcement: apps that *"misrepresent their purpose during review and only reveal harmful capabilities — such as 'nudification' — after approval"* (bait-and-switch) were already banned as hidden features; §2.5.19 makes that an explicit rule with account termination. Apple says it *"prevented over 150K apps with safety issues from reaching customers and terminated over 193K developer accounts for engaging in fraud and abuse"* last year, tracing the violations to malicious actors — *"in some cases coordinated fraud operations — working to conceal harmful content that only becomes active once an app is approved"* — and that it keeps improving detection. Expect more post-approval checks of server-driven behavior. Apple's [removal page](https://developer.apple.com/help/app-review/safe-and-trusted-store/app-removals) already lists *"modified after approval, such as through a server-side change"* as a removal trigger.
+
+### "Things that can get you banned" — what is actually new
+
+Summaries of this update circulating among developers list three ban triggers. Only the first changed in October 2026; the other two are long-standing rules whose text is unchanged:
+
+| Summary | Rule | New in October 2026? |
+| --- | --- | --- |
+| Tricking the review process or hiding dormant code | Introduction ("cheat the system ... trick the review process" → apps removed, developer expelled); **§2.5.19**; ADPLA §3.2(3) post-review modifications | **Yes** — §2.5.19 (Oct 16) + ADPLA §3.2(3) (Oct 13) |
+| Buying fake reviews or manipulating chart rankings | §3 Business intro (*"paid, incentivized, filtered, or fake feedback"*, including via third-party services); §5.6.3 Discovery Fraud; ADPLA §3.2 fraudulent reviews | No — unchanged |
+| Copying other developers' UI, icons, or brand names | §4.1(a) copycats, (b) impersonation → Code of Conduct, (c) no other developer's icon/brand/product name in your icon or name; §5.2.1; ADPLA §3.2 confusingly similar names / name squatting | No — unchanged; new help page linked from 4.1 |
+
+Full trigger map and pre-submission integrity audit: [SKILL.md — Gate L](SKILL.md#gate-l--review-integrity--account-termination-triggers-intro-2519-3-41-56).
+
+### Practical impact
+
+- **Feature flags / remote config:** list every flag-controlled capability in Notes for Review with its state in the review build. A staged rollout of a reviewed feature is fine; enabling something App Review never saw is a §2.5.19 violation and, under ADPLA §3.2(3), a contract breach.
+- **Obfuscation:** allowed for IP protection, but it can't hide functionality. Say in Notes for Review that you use it and why.
+- **UGC & AI generation apps:** NCII prevention (real-person likeness filters, prompt/output moderation), fast takedowns, and a compliance-plan template are now baseline; gaps can escalate to account termination.
+- **Creative assets:** new rejection surface — brand art is fine, prices/discounts, competitor references, and unverifiable claims are not.
+- **External purchase links:** check that each entitlement covers the **platform** you ship (not only the storefront) and that the link target is an approved destination for that region.
+
+---
+
+## BREAKING: October 13, 2026 — ADPLA Revision (integrity terms, new APIs, HomeView, multiseat)
+
+**Source:** <https://developer.apple.com/news/?id=17mwd36z> · §3.2 verified by diffing the agreement against the October 12, 2026 snapshot. The Account Holder must accept the updated terms.
+
+- **§3.2 — new prohibited-code items.** You may not create any product, code, or program that would: *"(3) deceive regarding the identity, purpose, or behavior of the product, code, or program, including through post-review modifications that would cause harm to others, including end users or Apple; (4) impersonate Apple or any third party to solicit credentials or other sensitive information; (5) implement security or privacy protections in a manner that is intentionally weakened, or inconsistent with what is described; (6) whether through Your own code or someone else's, access, collect, or transmit user data beyond what was disclosed when consent was requested; or (7) use the end user's device or network resources to provide services to third parties without the user's explicit prior consent."* Items (1)–(2) (defeating Apple security; harming system security) were already there.
+  - (3) is the contract twin of guideline §2.5.19 — bait-and-switch is now a guideline **and** a license violation.
+  - (6) makes you liable for SDK over-collection ("someone else's" code).
+  - (7) targets proxy / bandwidth-sharing / background-compute SDKs that resell users' connections or CPU.
+- **§3.3.8(J) Live Assistance API** — connects an app to the user's FaceTime call; allowed only at the user's invitation and solely so an accessibility service provider can join to provide services such as captioning or translation.
+- **§3.3.8(K) App Replacement Entitlement** — first launch of your replacement app shows a system sheet offering to move data and settings from your original app and delete it. Only allowed when both apps are under your membership and have *"substantively the same primary purpose and functionality."*
+- **§6.4, 6.4.1, 6.4.2 — CarPlay and Apple HomeView:** your iOS app widgets may be shown on CarPlay **and Apple HomeView**; you decide whether a widget is suitable for CarPlay and use `disfavoredLocations` if not (Apple can also disfavor it). Apps with a CarPlay entitlement in an Apple-identified category may be offered on Apple HomeView while running on a paired iOS device.
+- **Schedule 2 — Group Purchases:** a "Group Organizer" buys an auto-renewable subscription for a group; each "Group Member" is an End-User. Refunds may be full or for unused seats; no partial refund for a seat an active Group Member is using.
+- **Schedule 3 — Volume Purchasing:** subscriptions bought by organizations through Apple Business / Apple School Manager; opting out of multiseat or changing availability can stop renewals and remove the subscription from those portals.
+- **Schedules 2 & 3 §3.3:** Apple reports legally required tax, sales, and contact information to tax authorities; customer tax information Apple shares with you may be used only for purposes mandated by law.
+
+---
+
+## EU Unified Business Terms — ADPLA Attachment 14 (effective October 1, 2026)
+
+**Sources:** <https://developer.apple.com/news/?id=gmws0jgp> · <https://developer.apple.com/news/?id=0cgo95n6> · <https://developer.apple.com/support/apps-in-the-eu/>
+
+Attachment 14 (added August 18, 2026) moves every developer distributing in the EU to one set of terms and, from October 1, 2026, supersedes the **Alternative Terms Addendum for Apps in the EU** and the **StoreKit External Purchase Link Entitlement (EU) Addendum**. Fees already accrued under the old agreements are still owed.
+
+**Payment options in EU storefronts (iOS, iPadOS, macOS, tvOS, visionOS, watchOS apps):**
+
+- Apple IAP keeps working with no changes.
+- You may **also** offer in-app **alternative payment processing** and/or **out-of-app offers** to a destination of your choice — website, alternative app marketplace, or another app — with or without an actionable link. The old rule that an EU app could not offer IAP and alternative payments at the same time is gone.
+- Whatever combination you choose must be kept for **12 months**.
+- Reader apps may promote out-of-app offers **without** an actionable link, with or without the External Link Account Entitlement (placement rules apply).
+
+**Commissions (App Store, EU):**
+
+| What | Standard | Small Business / Mini Apps Partner / Video Partner programs, subscriptions after year one |
+| --- | --- | --- |
+| Sales through Apple IAP | 26% | 15% |
+| In-app alternative payment processing | 20% | 10% |
+| Store services commission — out-of-app offer with actionable link (sales within 7 days of the tap) | 15% | 10% |
+| Core Technology Commission — alternative marketplaces, their apps, Web Distribution | 5% | — |
+
+The Core Technology Fee (per-install), the Initial Acquisition Fee, and the old Store Services Fee tiers are **eliminated**. Alternative-payment transactions must be reported **monthly**, within 15 days after month end; you collect and remit taxes on them.
+
+**Child safety for alternative payments on the App Store:**
+
+- **Kids category:** alternative payment flows behind a parental gate; no out-of-app offers to buy on a website.
+- **Under 13** (or the storefront's higher age of parental consent, e.g. 16): alternative payments behind a parental gate; **no** out-of-app offers.
+- **13–17** (or 16–17): both alternative payments and out-of-app offers behind a parental gate.
+
+**Alternative distribution:** eligibility to run an alternative marketplace or use Web Distribution now needs only **one** of: a moderate Dun & Bradstreet financial-stability score, being publicly traded (or owned by a public company), established venture funding, a licensed financial audit, approved government/education/nonprofit fee-waiver status, a USD 1,000,000 stand-by letter of credit, or one million first annual installs worldwide — and **no EU legal entity**. Small marketplace operators (under €10M global revenue in the last 12 months and under €1M lifetime EU marketplace revenue) can have the CTC waived on marketplace download/subscription fees. With iOS/iPadOS 27.2: a new install experience, an API for starting web-distributed app downloads from your own app, and installs allowed for 90 days while EU users travel abroad.
+
+This replaces the January 2026 "single business model" summary under [Commission Rate Changes](#commission-rate-changes-2026).
+
+---
+
+## Fall 2026 Platform & App Store Connect Changes (August–October 2026)
+
+### iPhone Duo & screenshot specifications (October 5, 2026)
+
+**Sources:** <https://developer.apple.com/news/?id=kkphp5qo> · <https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications>
+
+- iPhone Duo ships **October 23, 2026** on iOS 27.1. Recompile with **Xcode 27.1**; check every pose and orientation with Device Hub.
+- Screenshots: **1398x2034 / 2034x1398** (outer display) and **2007x2853 / 2853x2007** (inner display). Providing them adds an "optimized for iPhone Duo" badge; from **April 2027**, apps built with the **iOS 27.1 SDK or later** must include them.
+- Updated app preview specs and a product page **preview tool** in App Store Connect show how assets look on each device and orientation.
+
+### Creative assets, Asset Library & product page preview (August 5 / October 5, 2026)
+
+**Sources:** <https://developer.apple.com/news/?id=ljpl7kyn> · <https://developer.apple.com/app-store/asset-best-practices/> · <https://developer.apple.com/help/app-store-connect/reference/app-information/creative-assets-specifications>
+
+- New **creative assets** for the product page header and search results (iOS/iPadOS 27+), reviewed under new guideline **§2.3.14**. Can also be used on custom product pages and tested with product page optimization.
+- Specs (no alpha/transparency): header **21:9 3840x1646** (JPEG/PNG) or **16:9 5244x2950** (PNG); search results **3:2** from 1920x1280 to 3840x2560 (JPEG/PNG) or 16:9 5244x2950 (PNG). Videos 30 or 60 fps, **5–30 s**, muted by default, looping. In-App Event media: 16:9 card + 9:16 details page (video 15–30 s).
+- Best-practice rules App Review applies: no specific prices, discounts, website URLs, or copyright symbols; no unverifiable claims (awards you didn't win); no logos of other platforms or marketplaces; no Apple recognitions (Editor's Choice, App of the Day, Game of the Day, Apple Design Award); 4+ appropriate, no gore or weapons pointed at a person or the viewer.
+- The **Asset Library** stores approved assets (submit seasonal art ahead of time, use it when ready); assets can also be uploaded with the App Store Connect API.
+
+### SDK & deployment-target minimums (September 9, 2026)
+
+**Sources:** <https://developer.apple.com/news/?id=k1mtkt1k> · <https://developer.apple.com/app-store/submitting/> · <https://developer.apple.com/news/upcoming-requirements/>
+
+- **Since September 9, 2026:** iOS and iPadOS uploads must **target iOS 13 or later**.
+- **From April 2027:** iOS/iPadOS apps built with the **iOS & iPadOS 27 SDK** and targeting **iOS 15 or later**; tvOS, visionOS, watchOS apps with their **27 SDKs**.
+- macOS 27 is **Apple silicon only** (macOS 26 was the last release for Intel Macs). To drop Intel support, build arm64 only and resubmit.
+
+### Subscriptions: Bundles & Suites, multiseat (September 16, 2026)
+
+**Sources:** <https://developer.apple.com/news/?id=likeohx4> · <https://developer.apple.com/app-store/subscriptions/bundles-and-suites/>
+
+- **Multiseat purchases are enabled by default** for subscriptions: **Volume Purchasing** for Apple Business / Apple School Manager launches **October 22, 2026**; **Group Purchases** (a subscriber buys seats and invites others; Apple handles invitations) launch this winter. Manage or disable per subscription in App Store Connect. Contract terms: ADPLA Schedules 2 & 3 (October 13, 2026).
+- **Bundles** (request-based): up to **5** subscriptions in one IAP, from one developer or up to **5** developers (each signs the Multi-Developer Bundle Program Legal Addendum). **Suites**: one subscription across up to **15** of your apps. Requires **StoreKit 2** and iOS/iPadOS/macOS/tvOS 27+; subscriptions in a Bundle must share the same duration. Buying a Bundle that contains an existing standalone subscription upgrades it immediately with a prorated refund.
+
+### ATT alternative prompt in the EU (September 16, 2026)
+
+**Sources:** <https://developer.apple.com/news/?id=idsft9ai> · <https://developer.apple.com/app-store/user-privacy-and-data-use/>
+
+- From **iOS/iPadOS 27.2**, apps in the EU may use an **alternative ATT system prompt** with changed wording and an optional **"Additional Information"** text button that opens your own layered-consent screen (GDPR/ePrivacy). In **Germany, France, Italy, Poland, and Romania** only the alternative prompt is available.
+- EU users can be **re-prompted one year** after their last ATT choice (accept or reject), unless they turned off the system setting (renamed in the EU to "Allow Apps to Request to Link Your Activity Across Companies").
+- Rules on **when** tracking needs permission are unchanged: no IDFA access or tracking until the user allows it in the ATT prompt, and no gating or incentives (§5.1.2(i)). New docs: *Requesting Authorization with Expanded Interface*, *Tracking Markdown Usage Description*.
+
+### Sign in with Apple relay domain — correction (August 24, 2026)
+
+**Source:** <https://developer.apple.com/news/?id=1ptvdtcm>
+
+Apple revised its June plan: **new Sign in with Apple** relay addresses will be issued on **`private.icloud.com`** (later in 2026), existing **`privaterelay.appleid.com`** addresses keep working, and **iCloud+ Hide My Email stays on `icloud.com`** — there is no shared-domain unification. Allowlists and email validation must accept **both** relay domains.
+
+### macOS: Rosetta wind-down, Full Disk Access, Developer ID Sub-CA
+
+**Sources:** <https://developer.apple.com/news/?id=w5ngl9k2> · <https://developer.apple.com/news/?id=p6zjojqw> · <https://developer.apple.com/news/?id=w4atic4c>
+
+- **Rosetta:** macOS 26.4+ may warn users when launching Rosetta-dependent apps; Apple describes macOS 27 as the final Rosetta release, after which Intel-only apps stop running on Apple silicon (older, unmaintained games excepted). Ship a universal binary now.
+- **Full Disk Access:** Apple will add controls so FDA can only be granted with very explicit user action, citing apps (including AI agents and communication apps) that expose mail, messages, and browsing history. Design around scoped access.
+- **Developer ID Sub-CA expires February 1, 2027:** certificates from the original Developer ID CA stop working; `.pkg` files signed with them will no longer install. Create a replacement from the **G2** Sub-CA (pick "G2 Sub-CA" when prompted; update Xcode 11.4 or earlier first), re-sign packages, and sign future app updates with the new certificate and a secure timestamp. Already signed and notarized apps keep working.
+
+### Republic of Korea age ratings (August 12, 2026)
+
+**Source:** <https://developer.apple.com/news/?id=oj3r9pvw>
+
+- Apps with an official **GRAC** rating can override their Korea rating (All, 12+, 15+, 19+) by giving the GRAC Rating Classification Number with the next version submission.
+- From **October 2026**, two descriptors move from **All → 12+** for Games and Entertainment apps in Korea: infrequent profanity and crude humor; infrequent mature or suggestive themes.
+
+---
+
 ## BREAKING: Age Rating Questionnaire Adds Social Media Questions (July 9, 2026)
 
-**Source:** https://developer.apple.com/news/?id=tlur8uvi  
+**Source:** <https://developer.apple.com/news/?id=tlur8uvi>  
 **Deadline:** Responses **mandatory beginning September 2026**
 
 The App Store Connect age rating questionnaire now includes questions about your app's **social media capabilities** — defined as *"the ability to redistribute, amplify, or interact with user-generated content through a social feed or similar discovery method."*
@@ -22,7 +208,7 @@ The App Store Connect age rating questionnaire now includes questions about your
 
 ## BREAKING: Brazil — Alternative Distribution & Payments (June 18, 2026)
 
-**Source:** https://developer.apple.com/news/?id=umq9wxmm · https://developer.apple.com/news/  
+**Source:** <https://developer.apple.com/news/?id=umq9wxmm> · <https://developer.apple.com/news/>  
 **Legal basis:** Agreement with Brazil's competition regulator **CADE** (Conselho Administrativo de Defesa Econômica)
 
 As of **iOS 26.5**, developers on the **Brazil storefront** can:
@@ -40,8 +226,8 @@ As of **iOS 26.5**, developers on the **Brazil storefront** can:
 
 ## BREAKING: June 8, 2026 — Guidelines + ADPLA Revision (WWDC week)
 
-**Source:** https://developer.apple.com/news/?id=a233fmpw  
-**Coverage:** https://www.macrumors.com/2026/06/09/app-store-guidelines-low-quality-apps/  
+**Source:** <https://developer.apple.com/news/?id=a233fmpw>  
+**Coverage:** <https://www.macrumors.com/2026/06/09/app-store-guidelines-low-quality-apps/>  
 **Date:** June 8, 2026
 
 ### App Review Guidelines changes
@@ -64,6 +250,7 @@ As of **iOS 26.5**, developers on the **Brazil storefront** can:
 Old text (for comparison): *"Also avoid piling on to a category that is already saturated; the App Store has enough fart, burp, flashlight, fortune telling, dating, drinking games, and Kama Sutra apps, etc. already. We will reject these apps unless they provide a unique, high-quality experience. Spamming the store may lead to your removal from the Apple Developer Program."*
 
 What changed in practice:
+
 - **Saturated tier** (dating, flashlight, sound effects, wallpaper, simple timers, fortune telling): new submissions need a *meaningfully different or improved* experience; **existing** apps may be **removed** if not updated/improved or attracting no customers — a new clutter-cleanup power.
 - **Low-effort tier** (drinking games, Kama Sutra, fart, burp): labeled *"mediocre, low-quality, or low-effort"*; **repeated submissions → Apple Developer Program removal**.
 - Lists are explicitly **examples** ("such as") — expect application to adjacent categories.
@@ -93,13 +280,14 @@ What changed in practice:
 
 ## BREAKING: Vibe Coding App Crackdown (March 2026)
 
-**Source:** https://www.macrumors.com/2026/03/30/apple-pulls-vibe-coding-app/  
+**Source:** <https://www.macrumors.com/2026/03/30/apple-pulls-vibe-coding-app/>  
 **Date:** March 30, 2026  
 **Guideline:** §2.5.2
 
 Apple has escalated enforcement against "vibe coding" apps — tools that let users generate functional apps from natural language prompts using AI.
 
 **What happened:**
+
 - "Anything" (raised $11M, $100M valuation) was **removed entirely** from the App Store on March 26, 2026
 - Updates to **Replit** and **Vibecode** were blocked starting earlier in March 2026
 - Apple cited **Guideline 2.5.2** specifically: apps may not "download, install, or execute code which introduces or changes features or functionality"
@@ -108,17 +296,20 @@ Apple has escalated enforcement against "vibe coding" apps — tools that let us
 **Apple's official statement:** There are "no specific rules against vibe coding," but apps must adhere to longstanding §2.5.2 guidelines. The generated code constitutes new executable functionality introduced after review.
 
 **What this means for developers:**
+
 - AI-generated code that executes within your app = §2.5.2 violation
 - AI-generated code the user views/edits but doesn't execute in the host app = may be OK (educational exception)
 - Generating apps and publishing them as separate App Store submissions = each submission reviewed independently
 - The enforcement is **active and escalating** — not theoretical
 
 **Safe patterns:**
+
 - AI generates code → user copies it to Xcode → user submits their own app: OK
 - AI generates code → displayed in syntax-highlighted view → user can edit: OK (educational exception)
 - AI generates code → app executes the generated code natively: REJECTED
 
 **Rejected patterns:**
+
 - App generates mini-apps/tools and runs them in a native sandbox
 - App generates UI and renders it using dynamically loaded components
 - App creates functional software that operates within the host app
@@ -129,7 +320,7 @@ This is the most significant recent enforcement action related to AI code genera
 
 ## ADPLA Updated (March 30, 2026)
 
-**Source:** https://developer.apple.com/news/?id=03302026a
+**Source:** <https://developer.apple.com/news/?id=03302026a>
 
 The Apple Developer Program License Agreement was revised on **March 30, 2026** with new framework-specific requirements:
 
@@ -139,6 +330,7 @@ The Apple Developer Program License Agreement was revised on **March 30, 2026** 
 - **Accessory Live Activities framework** — New specified requirements
 
 **What this means for developers:**
+
 - If your app uses any of these frameworks, review the updated ADPLA terms before your next submission.
 - All current Apple Developer Program members should accept the updated agreement in their developer account.
 - Apps using Family Controls (Screen Time API) or accessory-related frameworks should verify compliance with the new terms.
@@ -147,15 +339,15 @@ The Apple Developer Program License Agreement was revised on **March 30, 2026** 
 
 ## Age Rating System Overhaul (July 2025 — Deadline January 31, 2026)
 
-**Source:** https://developer.apple.com/news/upcoming-requirements/?id=07242025a  
-**Source:** https://developer.apple.com/help/app-store-connect/reference/age-ratings
+**Source:** <https://developer.apple.com/news/upcoming-requirements/?id=07242025a>  
+**Source:** <https://developer.apple.com/help/app-store-connect/reference/age-ratings>
 
 Apple completely overhauled the age rating system in July 2025. **All apps must be compliant by January 31, 2026.**
 
 ### New age categories
 
 | Old System | New System (iOS 26+) |
-|-----------|---------------------|
+| ----------- | --------------------- |
 | 4+ | 4+ |
 | 9+ | 9+ |
 | 12+ | **13+** (new) |
@@ -165,6 +357,7 @@ Apple completely overhauled the age rating system in July 2025. **All apps must 
 ### What changed in the questionnaire
 
 The revised questionnaire now asks about:
+
 - **Parental controls** — Does the app have them?
 - **Messaging features** — Can users message each other?
 - **Health topics** — Does the app address health in ways requiring age gating?
@@ -174,6 +367,7 @@ The revised questionnaire now asks about:
 ### Territory-specific ratings
 
 Different regions now have distinct rating thresholds:
+
 - Australia, Brazil, South Korea, and others may show different age ratings for the same content
 - Apps must answer the questionnaire accurately; Apple maps answers to regional standards
 
@@ -193,7 +387,7 @@ Using "For Kids" or "For Children" in your app name, subtitle, description, or k
 
 ## Xcode 26 / iOS 26 SDK Minimum Requirement (Deadline: April 28, 2026)
 
-**Source:** https://developer.apple.com/news/upcoming-requirements/
+**Source:** <https://developer.apple.com/news/upcoming-requirements/>
 
 Starting **April 28, 2026**, all apps uploaded to App Store Connect must be built with **Xcode 26 or later** using an SDK for:
 
@@ -209,28 +403,33 @@ Builds compiled with older Xcode versions or SDKs will be **rejected at upload t
 
 **Status (June 2026):** This deadline has now passed and is in force — builds on older SDKs are rejected at upload.
 
+**Next (announced September 9, 2026):** iOS/iPadOS uploads must target **iOS 13+** now, and from **April 2027** must use the **iOS & iPadOS 27 SDK** with an **iOS 15+** deployment target (tvOS/visionOS/watchOS: 27 SDKs). See [SDK & deployment-target minimums](#sdk--deployment-target-minimums-september-9-2026).
+
 ---
 
 ## BREAKING: Texas Age Assurance — SB 2420 (Effective June 4, 2026)
 
-**Source:** https://developer.apple.com/news/?id=sg176nne
-**Source:** https://www.macrumors.com/2026/06/03/apple-app-store-texas-sb-2420/
+**Source:** <https://developer.apple.com/news/?id=sg176nne>
+**Source:** <https://www.macrumors.com/2026/06/03/apple-app-store-texas-sb-2420/>
 **Date:** Live since June 4, 2026 (a federal injunction was lifted, putting the law into effect)
 
 Texas law **SB 2420** introduces age-assurance and parental-consent obligations for app marketplaces and developers. It now applies to **new Apple Accounts created in Texas**. This is a live legal requirement, not a future deadline — treat it as a hard compliance item for any app available in the US.
 
 **What Apple changed for users:**
+
 - People creating an Apple Account in Texas must confirm whether they are 18 or older.
 - Accounts for users under 18 must belong to a **Family Sharing** group.
 - Parents/guardians must **consent** to App Store downloads, in-app purchases, and in-app transactions for minors.
 
 **What developers must implement (App Store Connect / APIs):**
+
 - **Declared Age Range API** — retrieve the broad age band of a Texas Apple Account (an age *category*, not a birth date or ID document). This is no longer beta-only for these obligations.
 - **Significant Change API** (under the **PermissionKit** framework) — you are responsible for determining when your app has a "significant change"; a significant change requires **re-obtaining parental consent**.
 - **New age-rating property type in StoreKit**.
 - **App Store server notifications** for **consent revocations** — handle the case where a parent withdraws consent.
 
 **Practical implication:**
+
 - If you serve US users, assume Texas users may be minors with consent gating on downloads and purchases. Build entitlement/consent checks server-side.
 - Pair this with the existing age-rating overhaul work (see below) — declared/verified age enforcement is now both a guideline obligation *and* a state-law obligation.
 
@@ -238,7 +437,7 @@ Texas law **SB 2420** introduces age-assurance and parental-consent obligations 
 
 ## Age Ratings: Australia & Vietnam Update (Effective June 18, 2026)
 
-**Source:** https://developer.apple.com/news/
+**Source:** <https://developer.apple.com/news/>
 
 Starting **June 18, 2026**, App Store age ratings are updated in **Australia** and **Vietnam**. Notably, the **15+ age rating is no longer available** on the App Store in **Australia**. If you publish to these storefronts, re-check your App Store Connect age-rating answers so your displayed rating maps correctly to the local scheme.
 
@@ -246,20 +445,20 @@ Starting **June 18, 2026**, App Store age ratings are updated in **Australia** a
 
 ## WWDC 2026 (June 8–12, 2026) — concluded; follow-ups tracked
 
-**Source:** https://www.apple.com/newsroom/2026/05/apple-kicks-off-worldwide-developers-conference-on-june-8/
+**Source:** <https://www.apple.com/newsroom/2026/05/apple-kicks-off-worldwide-developers-conference-on-june-8/>
 
-WWDC 2026 keynote was **June 8, 2026**. ✅ The expected Guidelines + ADPLA revision landed the same day — see [June 8, 2026 revision](#breaking-june-8-2026--guidelines--adpla-revision-wwdc-week). Post-WWDC follow-ups so far: **Brazil commerce opening (June 18)** and **social media age-rating questions (July 9, mandatory September 2026)** — both covered above — plus the **Sign in with Apple / iCloud+ Hide My Email domain unification** announced June 15, 2026: relay addresses move to a single shared domain, **`private.icloud.com`**, later this summer — update any backend allowlists or validators that hardcode `privaterelay.appleid.com`. Still expected: next-year SDK minimums (iOS 27 signals, likely an Xcode 27-era upload requirement around April 2027).
+WWDC 2026 keynote was **June 8, 2026**. ✅ The expected Guidelines + ADPLA revision landed the same day — see [June 8, 2026 revision](#breaking-june-8-2026--guidelines--adpla-revision-wwdc-week). Post-WWDC follow-ups so far: **Brazil commerce opening (June 18)** and **social media age-rating questions (July 9, mandatory September 2026)** — both covered above — plus the **Sign in with Apple relay-domain change** announced June 15, 2026 — **revised August 24, 2026**: only **new Sign in with Apple** addresses move to **`private.icloud.com`**; existing `privaterelay.appleid.com` addresses keep working and **Hide My Email stays on `icloud.com`** (see [Fall 2026 changes](#sign-in-with-apple-relay-domain--correction-august-24-2026)). Accept both relay domains in allowlists and validators. The next-year SDK minimums have since been announced: **iOS 27 SDK + iOS 15 deployment target from April 2027** (see [Fall 2026 changes](#sdk--deployment-target-minimums-september-9-2026)).
 
 ---
 
 ## App Size Limits & Distribution Constraints
 
-**Source:** https://developer.apple.com/help/app-store-connect/reference/app-uploads/maximum-build-file-sizes
+**Source:** <https://developer.apple.com/help/app-store-connect/reference/app-uploads/maximum-build-file-sizes>
 
 ### Maximum build sizes by platform
 
 | Platform | Max Uncompressed App Size | Max Executable (__TEXT) | Notes |
-|----------|--------------------------|------------------------|-------|
+| ---------- | -------------------------- | ------------------------ | ------- |
 | iOS / iPadOS (iOS 9+) | 4 GB | 80 MB (total __TEXT) | — |
 | macOS | 200 GB | — | — |
 | tvOS | 4 GB | 500 MB | — |
@@ -298,24 +497,25 @@ func application(_ application: UIApplication,
 
 ## Screenshot & Media Requirements
 
-**Source:** https://developer.apple.com/help/app-store-connect/reference/screenshot-specifications
+**Source:** <https://developer.apple.com/help/app-store-connect/reference/screenshot-specifications>
 
-### iPhone screenshot sizes (required baseline: 6.9")
+### iPhone screenshot sizes (updated October 2026)
 
-**6.9" (1320 x 2868) is the required size.** If not provided, the App Store scales from 6.5" (1284 x 2778). Smaller sizes are optional overrides.
+Apple's spec page now groups iPhones by display class. Its "Required device sizes" text asks for **at least one screenshot for "iPhone with Dynamic Island (medium display)"**, while the size table still marks the 6.5" set as required when no Dynamic Island large-display screenshots are provided and scales everything else down from the largest set. Until Apple reconciles the page, upload **both** a large (6.9") and a medium (6.3") set.
 
-| Display | Dimensions (portrait) | Status | Device Examples |
-|---------|----------------------|--------|-----------------|
-| 6.9" | 1320 x 2868 | **Required** | iPhone 17 Pro Max, 16 Pro Max, 15 Pro Max |
-| 6.5" | 1284 x 2778 | Fallback if 6.9" missing | iPhone 14 Plus, 13 Pro Max, XS Max |
-| 6.3" | 1179 x 2556 | Optional | iPhone 17 Pro, 16 Pro, 15 Pro |
-| 6.1" | 1170 x 2532 | Optional | iPhone 14, 13, 12 |
-| 5.5" | 1242 x 2208 | Optional (legacy) | iPhone 8 Plus, 7 Plus |
+| Display class | Dimensions (portrait) | Status | Device examples |
+| --------- | ---------------------- | -------- | ----------------- |
+| iPhone Duo | 1398 x 2034 (outer), 2007 x 2853 (inner); landscape also accepted | Optional; **required from April 2027** for apps built with the iOS 27.1 SDK+ | iPhone Duo |
+| Dynamic Island, large | 1320 x 2868 · 1290 x 2796 · 1260 x 2736 | Recommended (scaling source) | iPhone 18/17/16 Pro Max, iPhone Air |
+| Face ID, large (6.5") | 1284 x 2778 · 1242 x 2688 | Required if no Dynamic Island large set | iPhone 14 Plus, 13 Pro Max, XS Max |
+| Dynamic Island, medium | 1206 x 2622 · 1179 x 2556 | **Listed as required** in the page header | iPhone 18 Pro, 17 Pro, 17, 16, 15 |
+| Face ID, medium | 1170 x 2532 · 1125 x 2436 · 1080 x 2340 | Optional | iPhone 17e, 16e, 14, 13, 12 |
+| Home button, large (5.5") | 1242 x 2208 | Optional (legacy) | iPhone 8 Plus, 7 Plus |
 
 ### iPad screenshot sizes (required baseline: 13", if app supports iPad)
 
 | Display | Dimensions (portrait) | Status |
-|---------|-----------------------|--------|
+| --------- | ----------------------- | -------- |
 | 13" | 2064 x 2752 | **Required** |
 | 12.9" (older) | 2048 x 2732 | Optional |
 | 11" | 1488 x 2266 | Optional |
@@ -327,7 +527,9 @@ func application(_ application: UIApplication,
 - 1–10 screenshots per device size
 - **Exact pixel dimensions are mandatory** — even 1 pixel off can fail upload
 - Screenshots must reflect the **current** build's UI — outdated screenshots trigger §2.3 rejection
+- **More than half** of the screenshots for each device must show the app in use (e.g. 2 of 3, 3 of 4); the rest can be marketing frames, splash art, or benefits text ([App Review guidance for 2.3.3](https://developer.apple.com/help/app-review/guideline-reference/2-3-3-screenshots)). Login-only or splash-only sets are rejected; overlays may not crowd out the app UI. Third-party platform references (e.g. in a status bar) fall under §2.3.10.
 - Screenshots cannot contain misleading content, fake device frames from wrong device, or competitor app names
+- Brand or seasonal art that doesn't show the app belongs in **creative assets** (§2.3.14), not screenshots — see [Creative assets](#creative-assets-asset-library--product-page-preview-august-5--october-5-2026)
 
 ### App Previews (video)
 
@@ -347,13 +549,14 @@ fastlane snapshot --devices "iPhone 16 Pro Max" "iPhone SE" "iPad Pro (12.9-inch
 
 ## visionOS-Specific Requirements
 
-**Source:** https://developer.apple.com/visionos/submit
+**Source:** <https://developer.apple.com/visionos/submit>
 
 ### App motion declaration (REQUIRED)
 
 All visionOS apps **must** declare app motion information before submission. This is a **required property** in App Store Connect.
 
 Options:
+
 - **No high motion** — Standard spatial app
 - **High motion** — App contains frequent fast/sudden camera movements, quick turns, or unusual orientations
 
@@ -380,13 +583,14 @@ This declaration appears on the product page to warn users sensitive to motion. 
 ## Launch Screen Requirement
 
 **Required since:** April 30, 2020  
-**Source:** https://developer.apple.com/documentation/xcode/specifying-your-apps-launch-screen
+**Source:** <https://developer.apple.com/documentation/xcode/specifying-your-apps-launch-screen>
 
 All iOS apps submitted to the App Store **must** use an Xcode storyboard or Info.plist configuration to provide a launch screen. Apps without a launch screen storyboard are rejected.
 
 ### Xcode 16 known issue
 
 The launch screen configuration UI in Xcode 16 has known bugs:
+
 - Blue dropdown autofill button doesn't work reliably
 - Fix: manually type the launch screen filename in the field
 - Verify `UILaunchStoryboardName` key exists in Info.plist
@@ -410,7 +614,7 @@ SwiftUI apps using `@main` App protocol may not have an explicit storyboard. Ens
 
 ## App Transport Security (ATS) Exceptions
 
-**Source:** https://developer.apple.com/documentation/bundleresources/information-property-list/nsapptransportsecurity
+**Source:** <https://developer.apple.com/documentation/bundleresources/information-property-list/nsapptransportsecurity>
 
 ### What triggers review scrutiny
 
@@ -456,6 +660,7 @@ iOS 17 introduced stricter IP-based connection restrictions. Apps connecting to 
 ### ITMS-9000: Invalid Binary (catch-all)
 
 Most common causes:
+
 - Incomplete or missing metadata/assets
 - Entitlements in app don't match App Store Connect capabilities
 - Mismatched or expired provisioning profiles
@@ -464,12 +669,14 @@ Most common causes:
 ### ITMS-90161: Invalid Provisioning Profile
 
 Causes:
+
 - Expired provisioning profile
 - Bundle identifier mismatch between Xcode project and profile
 - Revoked distribution certificate
 - App ID capabilities don't include entitlements claimed in the binary
 
 Fix workflow:
+
 ```
 1. Apple Developer Portal → Profiles → find your distribution profile
 2. Verify: not expired, correct bundle ID, correct certificate
@@ -487,6 +694,7 @@ Triggered when the binary contains references to deprecated APIs like `UIWebView
 Similar to ITMS-91061 but specifically for your own code (not SDKs) using required-reason APIs without declaring the reason in your app-level `.xcprivacy` manifest.
 
 Fix:
+
 ```xml
 <!-- YourApp/PrivacyInfo.xcprivacy -->
 <dict>
@@ -512,11 +720,13 @@ do not match the ones in your provisioning profile"
 ```
 
 Common when:
+
 - You add a capability in Xcode (e.g., Push Notifications, Sign in with Apple) but don't regenerate the provisioning profile
 - You remove a capability from ASC but the entitlements file still claims it
 - Your development entitlements leak into the distribution build
 
 Debug:
+
 ```bash
 # Compare app entitlements vs provisioning profile
 codesign -d --entitlements :- YourApp.app
@@ -529,20 +739,31 @@ security cms -D -i embedded.mobileprovision
 
 ## App Store Improvements: Inactive App Removal
 
-**Source:** https://developer.apple.com/support/app-store-improvements/
+**Source:** <https://developer.apple.com/help/app-review/safe-and-trusted-store/app-store-improvements> (moved from developer.apple.com/support/app-store-improvements; linked from "Before You Submit" since October 2026)
 
-Apple proactively removes apps that meet ALL of these criteria:
+Apple evaluates all apps for function, current-guideline compliance, and staleness; App Review contacts you when an app has an issue. It proactively removes apps that meet ALL of these criteria:
+
 1. Not updated within the **last 3 years**
 2. Fail to meet a **minimum download threshold** (extremely few or zero downloads in a rolling 12-month period)
 
 ### Process
+
 - Developer receives email notification identifying the app
 - **90-day window** to submit an update
 - Apps that **crash on launch** are removed immediately (no 90-day grace period)
 - Removed apps can be resubmitted anytime if developer maintains active membership
-- Existing users retain access; only new downloads are blocked
+- Existing users retain access (including in-app purchases); only new downloads are blocked; the app name stays reserved to your account
+
+### Other live-app removals (not inactivity)
+
+Per [Respond to an app removal](https://developer.apple.com/help/app-review/safe-and-trusted-store/app-removals), App Review also removes live apps that include **hidden features** or were **modified after approval** (e.g. via a server-side change) in a way that introduces a violation, apps with user-reported issues that didn't occur in review, and apps subject to legal / IP / government takedown requests:
+
+- Less severe issues: usually **14 days** to submit a compliant update
+- Serious safety or legal issues: **immediate** removal; restore by shipping a compliant update
+- Fundamentally incompatible concepts (e.g. built to deliver objectionable content): removed and **cannot be restored** — only a new app with a compatible concept
 
 ### Implications for long-lived apps
+
 - Even "finished" apps need periodic updates (at minimum: rebuild with latest Xcode/SDK)
 - Test old apps on latest OS versions before they break
 - Keep your Developer Program membership active
@@ -551,12 +772,13 @@ Apple proactively removes apps that meet ALL of these criteria:
 
 ## Regulated Medical Device Apps (2027 Deadline)
 
-**Source:** https://www.world-today-news.com/app-store-requirements-for-regulated-medical-device-apps-in-eea-uk-and-us/  
-**Update (March 26, 2026):** https://developer.apple.com/news/?id=03262026a
+**Source:** <https://www.world-today-news.com/app-store-requirements-for-regulated-medical-device-apps-in-eea-uk-and-us/>  
+**Update (March 26, 2026):** <https://developer.apple.com/news/?id=03262026a>
 
 Apps in the **Health & Fitness** or **Medical** categories targeting EEA, UK, and US markets will be required to declare **"Regulated Medical Device"** status in App Store Connect metadata.
 
 **Current status (as of March 26, 2026):**
+
 - The App Store **now displays** regulated medical device status on product pages in EEA, UK, and US
 - **New apps**: Must provide regulated device status **immediately** to distribute in these regions
 - **Existing apps**: Must provide status by **early 2027**; after that deadline, app updates cannot be submitted without the declaration
@@ -567,6 +789,7 @@ Apps in the **Health & Fitness** or **Medical** categories targeting EEA, UK, an
 ### What this means for health apps
 
 If your app makes medical claims, measures health metrics, or claims to diagnose conditions:
+
 - Declare medical device status in App Store Connect **now** (don't wait for the 2027 deadline)
 - Ensure regulatory clearance documentation is ready
 - Include FDA/CE clearance information in Notes for Review
@@ -589,7 +812,7 @@ All four must be valid and internally consistent at upload time.
 ### Common failures and fixes
 
 | Symptom | Cause | Fix |
-|---------|-------|-----|
+| --------- | ------- | ----- |
 | "No matching provisioning profile" | Profile doesn't include current entitlements | Regenerate profile in Developer Portal with current capabilities |
 | "Certificate has been revoked" | Someone on team revoked the cert | Create new distribution cert; regenerate all profiles |
 | ITMS upload fails silently | Expired profile | Check profile expiry in Keychain Access |
@@ -599,6 +822,7 @@ All four must be valid and internally consistent at upload time.
 ### Xcode automatic signing gotcha
 
 Automatic signing generates development profiles automatically but does **NOT** handle distribution profiles. For App Store submission:
+
 - Use manual signing for Release configuration
 - Or use `fastlane match` for team-shared certificates and profiles
 
@@ -609,7 +833,7 @@ Automatic signing generates development profiles automatically but does **NOT** 
 TestFlight builds also undergo review. Key differences:
 
 | Aspect | TestFlight Beta Review | App Store Review |
-|--------|----------------------|------------------|
+| -------- | ---------------------- | ------------------ |
 | Scope | Lighter; checks for crashes, basic compliance | Full guideline review |
 | Timeframe | Usually < 24 hours | 24-72 hours (can be longer) |
 | Demo account required? | Sometimes | Yes, for account-based apps |
@@ -618,6 +842,7 @@ TestFlight builds also undergo review. Key differences:
 | IAP review? | No (sandbox only) | Yes (products must be submitted) |
 
 ### TestFlight-specific rejection triggers
+
 - App crashes on launch (auto-rejected, no review needed)
 - Export compliance not answered
 - Privacy-impacting SDKs without manifests (ITMS errors at upload)
@@ -626,6 +851,7 @@ TestFlight builds also undergo review. Key differences:
 ### TestFlight to App Store transition trap
 
 Apps that work fine on TestFlight may still fail App Store review because:
+
 - TestFlight uses sandbox receipts; App Store review uses a different environment
 - IAP products must be explicitly submitted with the App Store build (TestFlight doesn't check this)
 - Privacy nutrition labels are enforced for App Store but not TestFlight
@@ -655,6 +881,7 @@ Common rejection-adjacent issue: Universal Links don't work during review becaus
 ```
 
 ### Common failures
+
 - AASA file behind authentication (CDN, firewall)
 - AASA file returns 301 redirect instead of direct response
 - Wrong `appID` format (must include Team ID prefix)
@@ -680,10 +907,13 @@ curl -v "https://app-site-association.cdn-apple.com/a/v1/yourdomain.com"
 > *"Widgets, extensions, and notifications should be related to the content and functionality of your app."*
 
 Rejection triggers:
+
 - Widget that displays advertising
 - Widget unrelated to host app's core function
 - Widget that deep-links to purchase flows
 - Widget that duplicates another widget without differentiation
+
+iOS app widgets can also appear on **CarPlay and Apple HomeView** (ADPLA §6.4.1, October 13, 2026): mark widgets that need heavy interaction or an unlocked iPhone with `disfavoredLocations` so they aren't offered while driving.
 
 ### Live Activities
 
@@ -739,41 +969,36 @@ VStack {
 
 ### China (effective March 15, 2026)
 
-**Source:** https://developer.apple.com/news/?id=03122026a
+**Source:** <https://developer.apple.com/news/?id=03122026a>
 
 - Standard IAP commission: **25%** (down from 30%)
 - Small Business Program & Mini Apps Partner Program (first year): **12%** (down from 15%)
 - Auto-renewal rate after year 1: **12%** (down from 15%)
 
 ### Global rates
+
 - Standard: 30%
 - Small Business Program (< $1M revenue): 15%
 - Auto-renewal after year 1: 15%
 
-### EU Digital Markets Act (DMA) — single business model (effective January 1, 2026)
+### EU — unified business terms (effective October 1, 2026)
 
-**Sources:** https://developer.apple.com/support/dma-and-apps-in-the-eu/ · https://adapty.io/blog/apple-eu-in-app-purchase-fee-system-2025/
+⚠️ **Superseded.** The interim EU fee stack this section used to describe (5% CTC on all channels, 5%/13% store services tiers, 2% initial acquisition fee, and the rule that one app could not offer IAP and alternative payments together) **no longer applies**. Since **October 1, 2026**, ADPLA **Attachment 14** sets: **26% / 15%** for IAP, **20% / 10%** for in-app alternative payments, **15% / 10%** store services commission on out-of-app offers with an actionable link, and **5%** CTC only for alternatively distributed apps; IAP and alternative payments may be offered **together**. Full details: [EU Unified Business Terms — Attachment 14](#eu-unified-business-terms--adpla-attachment-14-effective-october-1-2026).
 
-⚠️ **The old Core Technology Fee (CTF) of €0.50 per first annual install over 1M is gone.** As of **January 1, 2026**, Apple moved all EU developers to a **single business model** with a fee stack:
+**Source:** <https://developer.apple.com/support/apps-in-the-eu/>
 
-- **Core Technology Commission (CTC): 5%** of digital goods/services proceeds — replaces the per-install CTF and applies across **all** EU distribution paths (App Store, alternative marketplaces, web distribution).
-- **Store services fee:** **Tier 1 = 5%** (basic discovery/management) or **Tier 2 = 13%** (full App Store features, including automatic app updates and ratings). Opting into Tier 1 only gives up Tier 2 services.
-- **Initial acquisition fee: 2%** of proceeds from new users (first 6 months).
-- **StoreKit External Purchase Link Entitlement (EU):** subject to **2% acquisition + 13% store services + 5% CTC** on transaction proceeds.
-
-**Key restriction:** within the same app on the same EU storefront, you **cannot offer both** Apple In-App Purchase **and** alternative payment options simultaneously.
-
-> Always confirm exact current percentages against Apple's DMA support page before quoting them to stakeholders — DMA terms have changed repeatedly.
+> Always confirm exact current percentages against Apple's EU support page before quoting them to stakeholders — EU terms have changed repeatedly.
 
 ---
 
 ## Legal Precedent: Apple's Right to Remove (March 2026)
 
-**Source:** https://www.macrumors.com/2026/03/18/apple-wins-decisive-victory-in-musi-app-store-removal-lawsuit/
+**Source:** <https://www.macrumors.com/2026/03/18/apple-wins-decisive-victory-in-musi-app-store-removal-lawsuit/>
 
 A federal judge ruled that Apple's developer agreement gives it the right to **remove any app from the App Store at any time, "with or without cause."**
 
 Implications for developers:
+
 - Appealing a removal is a business request, not a legal right
 - The developer agreement supersedes the published guidelines
 - Apple can remove apps even if they comply with all published guidelines
@@ -786,6 +1011,7 @@ Implications for developers:
 iOS 14+ requires user permission for local network discovery (Bonjour, mDNS, multicast).
 
 ### Rejection pattern
+
 - App requests local network without a clear purpose string
 - Reviewer denies the prompt and app becomes non-functional
 
@@ -810,6 +1036,7 @@ iOS 14+ requires user permission for local network discovery (Bonjour, mDNS, mul
 A frequently overlooked rejection trigger: requesting notification permission at app launch.
 
 ### Rejected pattern
+
 ```swift
 // ❌ Requesting at launch — before user sees any value
 func application(_ application: UIApplication,
@@ -820,6 +1047,7 @@ func application(_ application: UIApplication,
 ```
 
 ### Correct pattern
+
 ```swift
 // ✅ Request in context, after user has seen value
 struct OnboardingCompleteView: View {
@@ -845,7 +1073,9 @@ struct OnboardingCompleteView: View {
 ```
 
 ### Apple's review behavior
+
 Reviewers test what happens when they **deny** every permission prompt. If the app:
+
 - Crashes → §2.1 rejection
 - Shows a blocking error screen → §5.1.2 rejection (coercion)
 - Shows empty state with "enable notifications to continue" → rejection
@@ -860,16 +1090,18 @@ A frequently overlooked post-approval guideline:
 > *"Customers expect the highest quality from the App Store... Indications that this expectation is not being met include excessive customer reports about concerns with your app, such as negative customer reviews, and excessive refund requests."*
 
 This means:
+
 - Even approved apps can be removed for low quality
 - High refund rates trigger review
 - Many 1-star reviews with "scam" or "doesn't work" flag the app
 - Apple monitors post-approval quality metrics
 
 ### Proactive defense
+
 - Monitor crash rates via App Store Connect → Analytics → Crashes
 - Respond to negative reviews via ASC (shows Apple you're engaged)
 - Fix reported issues promptly in updates
-- Don't incentivize positive reviews (§3.2.2(x) violation)
+- Don't buy, incentivize, or filter reviews (§3 Business intro, §5.6.3 Discovery Fraud — Program-removal risk); don't force ratings to unlock anything (§3.2.2(x)); prompt only through Apple's review API (§5.6.1)
 
 ---
 

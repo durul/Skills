@@ -35,6 +35,16 @@ Generate a comprehensive, user-facing changelog from git history since the last 
 - Check for duplicates and overly technical wording.
 - Ask for clarification if any change is ambiguous or possibly internal-only.
 
+### 5) Check App Review rules
+
+Release notes are App Store metadata, so App Review checks them.
+
+- **List every significant change (§2.3.12).** New features and product changes must appear in "What's New". A generic line like "Bug fixes and performance improvements" is only acceptable when the release really is just bug fixes, security updates, or performance work.
+- **Only describe what ships in this build (§2.3.1(a)).** Don't announce features that are still behind a disabled flag or rolling out later, and don't promise upcoming features.
+- **Match the App Review notes (§2.3.1(a), §2.5.19).** Every user-visible feature in the notes should also be described specifically in App Store Connect's Notes for Review, with how to reach it. Features that ship hidden or undisclosed count as hidden or dormant features, which since October 16, 2026 can lead to app removal and termination of the developer account.
+- **Keep it clean.** Don't use other apps' or brands' names to borrow attention (§2.3.7, §4.1). Avoid quoting prices or discounts, which can differ by storefront and become a "false price" (§2.3.1(a)), and avoid unverifiable claims such as "#1" or "fastest".
+- If a commit adds a feature that is off by default or server-controlled, flag it to the user instead of silently dropping or including it.
+
 ## Commit-to-Bullet Examples
 
 The following shows how raw commits are translated into App Store bullets:
